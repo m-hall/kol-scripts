@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Quick Skillz
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      1.0
 // @description  Quick access skills in char pane
 // @author       m-hall
 // @include        *kingdomofloathing.com/charpane.php
