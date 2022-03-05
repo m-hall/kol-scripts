@@ -97,6 +97,13 @@
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/fusilli.gif'
         },
         {
+            id: 6005,
+            cost: 4,
+            title: 'Cletus\'s Canticle of Celerity',
+            description: 'Combat Init +20%',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/celerity.gif'
+        },
+        {
             id: 6012,
             cost: 9,
             title: 'Jackasses Symphony of Destruction',
