@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Quick Skillz
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      0.1
 // @description  Quick access skills in char pane
 // @author       m-hall
 // @include        *kingdomofloathing.com/charpane.php
@@ -183,15 +183,20 @@
     // Your code here...
     if (window.location.pathname.includes('charpane')) {
         var body = document.body;
-        var charPane = body.querySelector('body > center:nth-of-type(2)');
+        var charPaneContainer = document.createElement('center');
+        var charPaneContents = body.querySelectorAll('body > :not(#rollover)');
 
         body.style.display = 'flex';
         body.style.flexDirection = 'column';
         body.style.height = '100%';
         body.style.margin = 0;
 
-        charPane.style.overflowY = 'auto';
-        charPane.style.flex = '1';
+        charPaneContainer.style.overflowY = 'auto';
+        charPaneContainer.style.flex = '1';
+
+        charPaneContents.forEach(el => charPaneContainer.appendChild(el));
+
+        body.appendChild(charPaneContainer);
 
         const style = `
         .close { right: 0 !important; }
@@ -265,6 +270,6 @@
                 skillname.style.display = 'none';
             })
         })
-        document.body.appendChild(container);
+        body.appendChild(container);
     }
 })();
