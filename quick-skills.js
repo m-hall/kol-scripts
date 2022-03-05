@@ -135,25 +135,25 @@
         },
         {name: 'stats'},
         {
+            id: 6008,
+            cost: 5,
+            title: 'The Power Ballad of the Arrowsmith',
+            description: '+10 Muscle, +20 HP',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/arrowsmith.gif'
+        },
+        {
+            id: 6007,
+            cost: 3,
+            title: 'The Magical Mojomuscular Melody',
+            description: '+10 Mysticality, +20 MP',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/mojomusc.gif'
+        },
+        {
             id: 6004,
             cost: 2,
             title: 'The Moxious Madrigal',
             description: '+10 Moxie',
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/madrigal.gif'
-        },
-        {
-            id: 3000,
-            cost: 1,
-            title: 'Manicotti Meditation',
-            description: '+2 Myst',
-            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/mandala.gif'
-        },
-        {
-            id: 6000,
-            cost: 1,
-            title: 'Moxie of the Mariachi',
-            description: '+3 HP, +1 Moxie',
-            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/accordion.gif'
         },
         {name: 'ML'},
         {
