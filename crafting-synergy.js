@@ -2,13 +2,14 @@
 // @name	Crafting synergy
 // @description	Adds the corresponding discoveries to the regular crafting pages and vice-versa
 // @include	*www.kingdomofloathing.com/craft.php*
+// @include      http://127.0.0.1:60080/craft.php*
 // ==/UserScript==
 
 /**
  * Sends an XML HTTP Request
  * @param {object} data         Any data necessary to build the request
  **/
-function request(data){
+ function request(data){
     var x = new XMLHttpRequest();
     x.open (data.method, data.url, false);
     x.onreadystatechange= function (){
@@ -21,14 +22,11 @@ function request(data){
 
 const pageTitle = document.querySelector('table + :is(table, center) td[bgcolor=blue]').innerText;
 let what, mode;
-let greyedItems, greyedHidden = false;
+let greyedHidden = false;
 
 function toggleGreyed() {
-    if (!greyedItems) {
-        return;
-    }
-
     const display = greyedHidden ? '' : 'none';
+    const greyedItems = document.querySelectorAll('td.gray');
     greyedHidden = !greyedHidden;
 
     greyedItems.forEach(item => {
@@ -71,8 +69,6 @@ if (what && mode){
 				create[i].parentNode.removeChild(create[i]);
 				parent.insertBefore(create[i], nextNode);
 			}
-
-            greyedItems = document.querySelectorAll('td.gray');
 		}
 	});
 }
