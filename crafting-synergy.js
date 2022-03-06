@@ -20,7 +20,7 @@
     x.send();
 }
 
-const pageTitle = document.querySelector('table + :is(table, center) td[bgcolor=blue]').innerText;
+const pageTitle = Array.from(document.querySelectorAll('td[bgcolor=blue]')).map(heading => heading.innerText).join('').toLowerCase();
 let what, mode;
 let greyedHidden = false;
 
@@ -42,18 +42,18 @@ document.querySelector('font[size="2"] button').addEventListener('click', functi
 
     toggleGreyed();
 })
-if (pageTitle.includes('Misc')){
+if (pageTitle.includes('misc')){
 	return;
-} else if (pageTitle.includes('Combine') || pageTitle.includes('Meat')) {
+} else if (pageTitle.includes('combine') || pageTitle.includes('meat-')) {
     what='combine';
-} else if (pageTitle.includes('Cook')) {
+} else if (pageTitle.includes('cook')) {
     what='cook';
-} else if (pageTitle.includes('mith')) {
+} else if (pageTitle.includes('smith')) {
     what='smith';
-} else if (pageTitle.includes('Cocktail')) {
+} else if (pageTitle.includes('cocktail')) {
     what='cocktail';
 }
-mode = pageTitle.includes('Discov') ? what : `discoveries&what=${what}`;
+mode = pageTitle.includes('discov') ? what : `discoveries&what=${what}`;
 
 if (what && mode){
 	request({
@@ -69,6 +69,8 @@ if (what && mode){
 				create[i].parentNode.removeChild(create[i]);
 				parent.insertBefore(create[i], nextNode);
 			}
+
+            toggleGreyed();
 		}
 	});
 }
