@@ -15,13 +15,13 @@
 
     const skillz = [
         {name: 'healing'},
-        {
-            id: 3009,
-            cost: 6,
-            title: 'Lasagna Bandages',
-            description: 'Heals 10-30 hp and removes Beat Up',
-            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/lasbandage.gif'
-        },
+        // {
+        //     id: 3009,
+        //     cost: 6,
+        //     title: 'Lasagna Bandages',
+        //     description: 'Heals 10-30 hp',
+        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/lasbandage.gif'
+        // },
         {
             id: 1010,
             cost: 10,
@@ -37,6 +37,13 @@
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/coccoon.gif'
         },
         {name: 'familiar'},
+        {
+            id: 2026,
+            cost: 10,
+            title: 'Curiosity of Br\'er Tarrypin',
+            description: '+1 Familiar Experience per combat',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/curiosity.gif'
+        },
         {
             id: 3010,
             cost: 12,
@@ -177,6 +184,13 @@
             description: '+2*lvl ML (Max 60)',
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/urkels.gif'
         },
+        {
+            id: 89,
+            cost: 40,
+            title: 'Drescher\'s Annoying Noise',
+            description: '+10 ML (20 turns)',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/brokenflute.gif'
+        },
         {},
         {
             id: 6014,
@@ -185,9 +199,27 @@
             description: '+Adv per booze potency',
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/odetobooze.gif'
         },
+        {},
+        {
+            id: 'umbrella',
+            title: 'unbreakable umbrella',
+            description: 'Update the umbrella\'s enchantment',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/unbrella5.gif',
+            action: () => {
+                window.top.frames.mainpane.location = `/inventory.php?action=useumbrella&pwd=${pwdhash}`;
+            }
+        },
+        {
+            id: 'locket',
+            title: 'combat lover\'s locket',
+            description: 'Reminisce on an old enemy',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/lovelocket.gif',
+            action: () => {
+                window.top.frames.mainpane.location = `/inventory.php?reminisce=1`;
+            }
+        }
     ];
 
-    // Your code here...
     if (window.location.pathname.includes('charpane')) {
         var body = document.body;
         var charPaneContainer = document.createElement('center');
@@ -217,6 +249,7 @@
         let prefix = '';
         let groupIsEven = false;
         const skillnameHTML = '<div id="skillName"></div>';
+        const actionMap = {};
         const buttons = `
             ${skillz.map(skill => {
                 if (!skill.id) {
@@ -227,7 +260,10 @@
                     }
                     return result;
                 }
-                return `<button data-which='${skill.id}' data-title="${skill.title}" data-cost="${skill.cost}" data-description="${skill.description}" style="padding: 0">
+                if (!Number.isInteger(skill.id)) {
+                    actionMap[skill.id] = skill.action;
+                }
+                return `<button data-which='${skill.id}' data-title="${skill.title}" data-cost="${skill.cost || ''}" data-description="${skill.description}" style="padding: 0">
                     <img src="${skill.image}" height="16" width="16">
                 </button>`;
             }).join(' ')}
@@ -245,6 +281,9 @@
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
                 const whichskill = this.dataset.which;
+                if (!Number.isInteger(+whichskill)) {
+                    actionMap[whichskill]();
+                }
                 if (e.shiftKey) {
                     pop_query($(this), 'How many times?', 'Do It!', function (res) {
                         dojax(`/runskillz.php?action=Skillz&whichskill=${whichskill}&targetplayer=0&pwd=${pwdhash}&quantity=${res}&ajax=1`);
@@ -252,24 +291,23 @@
                 } else {
                     dojax(`/runskillz.php?action=Skillz&whichskill=${whichskill}&targetplayer=0&pwd=${pwdhash}&quantity=1&ajax=1`);
                 }
-                // fetch(`/runskillz.php?action=Skillz&whichskill=${whichskill}&targetplayer=0&pwd=${pwdhash}&quantity=1&ajax=1&_=${+(new Date())}`)
-                //     .then((response) => {
-                //         return response.text();
-                //     })
-                //     .then((text) => {
-                //         console.log(text)
-                //         window.location.reload();
-                //     });
             })
             btn.addEventListener('contextmenu', function (e) {
                 e.preventDefault();
                 const whichskill = this.dataset.which;
+                if (!Number.isInteger(whichskill)) {
+                    return;
+                }
                 pop_query($(this), 'How many times?', 'Do It!', function (res) {
                     dojax(`/runskillz.php?action=Skillz&whichskill=${whichskill}&targetplayer=0&pwd=${pwdhash}&quantity=${res}&ajax=1`);
                 });
             });
             btn.addEventListener('mouseenter', function (e) {
-                skillname.innerHTML = `<div>${this.dataset.title} (${this.dataset.cost}mp)</div><div class='skillDesc'>${this.dataset.description}</div>`;
+                if (this.dataset.cost) {
+                    skillname.innerHTML = `<div>${this.dataset.title} (${this.dataset.cost}mp)</div><div class='skillDesc'>${this.dataset.description}</div>`;
+                } else {
+                    skillname.innerHTML = `<div>${this.dataset.title}</div><div class='skillDesc'>${this.dataset.description}</div>`;
+                }
                 skillname.style.display = 'block';
             })
             btn.addEventListener('mouseleave', function (e) {
