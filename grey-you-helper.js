@@ -73,6 +73,24 @@ const enemies = new Map([
     ['dopey 7-Foot Dwarf', {skill: 'Seven Foot Feelings', desc: '+5 Adventure(s) per day', zone: 'Itznotyerzitz Mine'}],
     ['banshee librarian', {skill: 'Self-Actualized', desc: '+5 Adventure(s) per day', zone: 'Haunted Library'}],
 
+    ['batrat', {adv: 5, zone: 'Batrat and Ratbat Burrow'}],
+    ['L imp', {adv: 5, zone: 'Dark Elbow of the Woods<br/>Pandamonium Slums'}],
+    ['G imp', {adv: 5, zone: 'Dark Elbow of the Woods<br/>Dark Heart of the Woods<br/>Pandamonium Slums'}],
+    ['P imp', {adv: 5, zone: 'Dark Heart of the Woods<br/>Dark Neck of the Woods<br/>Pandamonium Slums'}],
+    ['W imp', {adv: 5, zone: 'Dark Neck of the Woods<br/>Pandamonium Slums'}],
+    ['warwelf', {adv: 5, zone: 'Spooky Forest'}],
+    ['Knob Goblin Madam', {adv: 5, zone: 'Cobb\'s Knob Harem'}],
+    ['magical fruit bat', {adv: 5, zone: 'Beanbat Chamber'}],
+    ['grave rober', {adv: 5, zone: 'Unquiet Garves'}],
+    ['plastered frat orc', {adv: 5, zone: 'A Barroom Brawl'}],
+    ['swarm of Knob lice', {adv: 5, zone: 'Cobb\'s Knob Barracks'}],
+    ['Knob Goblin Master Chef', {adv: 5, zone: 'Cobb\'s Knob Kitchens'}],
+    ['Knob Goblin Bean Counter', {adv: 5, zone: 'Cobb\'s Knob Treasury'}],
+    ['albino bat', {adv: 5, zone: 'Bat Hole Entryway'}],
+    ['gingerbread murderer', {adv: 5, zone: 'Madness Bakery'}],
+    ['dire pigeon', {adv: 5, zone: 'Overgrown Lot'}],
+    ['irate mariachi', {adv: 5, zone: 'South of the Border'}],
+    ['swarm of skulls', {adv: 5, zone: 'Skeleton Store'}],
     ['whitesnake', {adv: 7, zone: 'Whitey\'s Grove'}],
     ['chalkdust wraith', {adv: 7, zone: 'Haunted Billiards Room'}],
     ['guy with a pitchfork, and his wife', {adv: 7, zone: 'Haunted Gallery'}],
@@ -103,24 +121,6 @@ const enemies = new Map([
     ['sheet ghost', {adv: 7, zone: 'Haunted Storage Room'}],
     ['upgraded ram', {adv: 7, zone: 'Icy Peak'}],
     ['vicious gnauga', {adv: 7, zone: 'Thugnderdome'}],
-    ['batrat', {adv: 5, zone: 'Batrat and Ratbat Burrow'}],
-    ['L imp', {adv: 5, zone: 'Dark Elbow of the Woods<br/>Pandamonium Slums'}],
-    ['G imp', {adv: 5, zone: 'Dark Elbow of the Woods<br/>Dark Heart of the Woods<br/>Pandamonium Slums'}],
-    ['P imp', {adv: 5, zone: 'Dark Heart of the Woods<br/>Dark Neck of the Woods<br/>Pandamonium Slums'}],
-    ['W imp', {adv: 5, zone: 'Dark Neck of the Woods<br/>Pandamonium Slums'}],
-    ['warwelf', {adv: 5, zone: 'Spooky Forest'}],
-    ['Knob Goblin Madam', {adv: 5, zone: 'Cobb\'s Knob Harem'}],
-    ['magical fruit bat', {adv: 5, zone: 'Beanbat Chamber'}],
-    ['grave rober', {adv: 5, zone: 'Unquiet Garves'}],
-    ['plastered frat orc', {adv: 5, zone: 'A Barroom Brawl'}],
-    ['swarm of Knob lice', {adv: 5, zone: 'Cobb\'s Knob Barracks'}],
-    ['Knob Goblin Master Chef', {adv: 5, zone: 'Cobb\'s Knob Kitchens'}],
-    ['Knob Goblin Bean Counter', {adv: 5, zone: 'Cobb\'s Knob Treasury'}],
-    ['albino bat', {adv: 5, zone: 'Bat Hole Entryway'}],
-    ['gingerbread murderer', {adv: 5, zone: 'Madness Bakery'}],
-    ['dire pigeon', {adv: 5, zone: 'Overgrown Lot'}],
-    ['irate mariachi', {adv: 5, zone: 'South of the Border'}],
-    ['swarm of skulls', {adv: 5, zone: 'Skeleton Store'}],
     ['blur', {adv: 10, zone: 'Oasis'}],
     ['Bob Racecar', {adv: 10, zone: 'Inside the Palindome'}],
     ['Racecar Bob', {adv: 10, zone: 'Inside the Palindome'}],
@@ -141,7 +141,46 @@ const enemies = new Map([
     ['tomb asp', {adv: 10, zone: 'Middle Chamber'}],
     ['pygmy orderlies', {adv: 10, zone: 'Hidden Hospital<br/>Hidden Bowling alley'}],
     ['One-Eyed Willie/Little Man', {adv: 10, zone: 'The Hole in the Sky'}],
-    ['1335 HaXx0r', {adv: 10, zone: 'Valley of Rof L\'m Fao'}]
+    ['1335 HaXx0r', {adv: 10, zone: 'Valley of Rof L\'m Fao'}],
+
+    ['stone temple pirate', {muscle: 3}],
+    ['Burly Sidekick', {muscle: 5}],
+    ['Knob Goblin Mutant', {muscle: 5}],
+    ['sleeping Knob Goblin Guard', {muscle: 5}],
+    ['angry bugbear', {muscle: 10}],
+    ['Fallen Archfiend', {muscle: 10}],
+    ['Fitness Giant', {muscle: 10}],
+    ['toothy sklelton', {muscle: 10}],
+
+    ['baa-relief sheep', {mysticality: 3}],
+    ['fiendish can of asparagus', {mysticality: 5}],
+    ['Quiet Healer', {mysticality: 5}],
+    ['Blue Oyster cultist', {mysticality: 10}],
+    ['bookbat', {mysticality: 10}],
+    ['forest spirit', {mysticality: 10}],
+    ['Hellion', {mysticality: 10}],
+    ['Possibility Giant', {mysticality: 10}],
+    ['seline lihc', {mysticality: 10}],
+    ['tomb servant', {mysticality: 10}],
+
+    ['craven carven raven', {moxie: 3}],
+    ['half-orc hobo', {moxie: 5}],
+    ['sassy pirate', {moxie: 5}],
+    ['Spunky Princess', {moxie: 5}],
+    ['demoninja', {moxie: 10}],
+    ['gaunt ghuol', {moxie: 10}],
+    ['Gnefarious gnome', {moxie: 10}],
+    ['Punk Rock Giant', {moxie: 10}],
+    ['swarm of scarab beatles', {moxie: 10}],
+
+    ['fluffy-bunny', {hp: 5}],
+    ['beefy bodyguard bat', {hp: 10}],
+    ['vampire bat', {hp: 10}],
+    ['corpulent zobmie', {hp: 20}],
+
+    ['Zol', {mp: 5}],
+    ['Grumpy 7-Foot Dwarf', {mp: 10}],
+    ['plaque of locusts', {mp: 20}],
 ])
 
 
@@ -152,11 +191,14 @@ function doFight(){
     const monster = document.getElementById('monname');
     let name = monster.innerText;
 
-    if (name.slice(0, 2) == 'a ' || name.slice(0, 4) == 'the ') {
+
+    let enemy = enemies.get(name);
+
+    if (!enemy) {
         name = name.slice(name.indexOf(' ') + 1);
     }
 
-    const enemy = enemies.get(name);
+    enemy = enemies.get(name);
 
     if (!enemy) {
         return;
@@ -167,8 +209,18 @@ function doFight(){
 
     if (enemy.adv) {
         info.innerHTML = `<img src="https://d2uyhvukfffg5a.cloudfront.net/itemimages/hourglass.gif" height="30" width="30" style="vertical-align: middle;" alt="Adventures"> ${enemy.adv} adventures`;
-    } else {
+    } else if (enemy.skill) {
         info.innerHTML = `<b>${enemy.skill}</b><br/>${enemy.desc}`;
+    } else if (enemy.muscle) {
+        info.innerHTML = `<b>${enemy.muscle} Muscle</b>`;
+    } else if (enemy.mysticality) {
+        info.innerHTML = `<b>${enemy.mysticality} Mysticality</b>`;
+    } else if (enemy.moxie) {
+        info.innerHTML = `<b>${enemy.moxie} Moxie</b>`;
+    } else if (enemy.hp) {
+        info.innerHTML = `<b>${enemy.hp} HP</b>`;
+    } else if (enemy.mp) {
+        info.innerHTML = `<b>${enemy.mp} MP</b>`;
     }
 
     mTable.after(info);
