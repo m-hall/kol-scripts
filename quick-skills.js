@@ -295,7 +295,7 @@
             btn.addEventListener('contextmenu', function (e) {
                 e.preventDefault();
                 const whichskill = this.dataset.which;
-                if (!Number.isInteger(whichskill)) {
+                if (!Number.isInteger(+whichskill)) {
                     return;
                 }
                 pop_query($(this), 'How many times?', 'Do It!', function (res) {
