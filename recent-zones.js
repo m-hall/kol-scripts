@@ -15,7 +15,7 @@
     const MAP_IMG = 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/map.gif';
 
     const user = document.querySelector('td[valign=center] a[href*=charsheet]');
-    const area = document.querySelector('a[href*=place]');
+    const area = Array.from(document.querySelectorAll('a')).find(a => a.innerText === 'Last Adventure:');
     const zone = document.querySelector('a[href*=adventure]');
     let recents = GM_getValue(RECENT_KEY + user.innerText) || [];
 
