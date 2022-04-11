@@ -1127,7 +1127,14 @@ function GetSpoilersForAdvNumber(advNumber) {
         "789": ["Where Does the Loan Ranger Take His Garbagester?", "\nacquire 2 Hidden City monster-drop items", "banish pygmy janitors", "3", "4", "5", "leave (no adv loss)"],
         //        from: tongue depressor, bowling ball, short-handled mop,\nsurgical apron,pill cup, surgical mask,\bloodied surgical dungarees,colorful toad,pygmy briefs,\gold B.A. token, half-size scalpel, bone abacus, head mirror",
 
-        "791": ["Legend of the Temple in the Hidden City", "\nwith 4 triangular pieces: fight boss\nwithout: nothing (no adv loss)", "2", "3", "4", "5", "leave (no adv loss)"]
+        "791": ["Legend of the Temple in the Hidden City", "\nwith 4 triangular pieces: fight boss\nwithout: nothing (no adv loss)", "2", "3", "4", "5", "leave (no adv loss)"],
+
+        // Nightstands
+        "876": ["One Simple Nightstand", "old leather wallet", "50-200 Strengthliness"],
+        "877": ["One Mahogany Nightstand", "half a memo - or - old coin purse", "Lose HP", "Quest Item"],
+        "878": ["One Ornate Nightstand", "400-600 Meat", "50-200 Wizardliness", "Lord Spookyraven's spectacles", "disposable instant camera"],
+        "879": ["One Rustic Nightstand", "50-200 Roguishness", "grouchy restless spirit or nothing", "fight jilted mistress"],
+        "880": ["One Elegant Nightstand", "Lady Spookyraven's finest gown", "elegant nightstick"],
 
 
 
