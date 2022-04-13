@@ -217,6 +217,15 @@
             action: () => {
                 window.top.frames.mainpane.location = `/inventory.php?reminisce=1`;
             }
+        },
+        {
+            id: 'backup',
+            title: 'backup camera',
+            description: 'Set Backup Camera mode.',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/backcamera.gif',
+            action: () => {
+                window.top.frames.mainpane.location = `/inventory.php?action=bcmode`;
+            }
         }
     ];
 

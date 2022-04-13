@@ -15,8 +15,7 @@
     const MAP_IMG = 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/map.gif';
 
     const user = document.querySelector('td[valign=center] a[href*=charsheet]');
-    const area = Array.from(document.querySelectorAll('a')).find(a => a.innerText === 'Last Adventure:');
-    const zone = document.querySelector('a[href*=adventure]');
+    const [area, zone] = Array.from(document.querySelectorAll('#nudgeblock+center a'));
     let recents = GM_getValue(RECENT_KEY + user.innerText) || [];
 
     const existingIndex = recents.findIndex(recent => recent.href === zone.href);
@@ -39,6 +38,7 @@
             content += ` <a onclick="if (top.mainpane.focus) top.mainpane.focus();" href="${recents[i].areaHref}" target="mainpane"><img height=16 width=16 src="${MAP_IMG}" style="vertical-align: middle;" /></a>`
         }
     }
+
     container.innerHTML = content;
     zone.after(container);
 

@@ -8,10 +8,11 @@
 // @icon         https://www.google.com/s2/favicons?domain=kingdomofloathing.com
 // ==/UserScript==
 
+const NO_SKILL_IMAGES = false;
+
 /***********************************/
 /********* Helper functions ********/
 /***********************************/
-const imgPrefix = 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/';
 const enemies = new Map([
     ['Pseudopod Slap', {skill: 'Pseudopod Slap', desc: 'Deals 10 damage (starting skill)', img: 'goocon10.gif', id: 27000}],
     ['remaindered skeleton', {skill: 'Hardslab', desc: 'Deal your Muscle in physical damage (no bonuses)', zone: 'Skeleton Store', img: 'goocon2.gif', id: 27001}],
@@ -98,6 +99,7 @@ const enemies = new Map([
     ['chalkdust wraith', {adv: 7, zone: 'Haunted Billiards Room'}],
     ['guy with a pitchfork, and his wife', {adv: 7, zone: 'Haunted Gallery'}],
     ['Ninja Snowman Janitor', {adv: 7, zone: 'Lair of the Ninja Snowmen'}],
+    ['oil baron', {adv: 7, zone: 'Oil Peak'}],
     ['Battlie Knight Ghost', {adv: 7, zone: 'A-Boo Peak'}],
     ['possessed silverware drawer', {adv: 7, zone: 'Haunted Kitchen'}],
     ['smut orc pipelayer', {adv: 7, zone: 'Smut Orc Logging Camp'}],
@@ -192,6 +194,23 @@ const nameVariants = [
     [/a junksprite.*bender/i, 'junksprite bender']
 ];
 
+const imgPrefix = 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/';
+const hourglass = getImage('hourglass.gif', 'Adventures');
+const goo = getImage('greygooball.gif', 'Grey Goo');
+
+function getImage(src, alt, size=30) {
+    return `<img src="${imgPrefix}${src}" height="${size}" width="${size}" style="vertical-align: middle;" alt="${alt}">`
+}
+
+function getSkillImage(src) {
+    if (NO_SKILL_IMAGES) {
+        return '';
+    }
+    if (!src) {
+        return goo;
+    }
+    return getImage(src);
+}
 
 /***********************************/
 /******** Section functions ********/
@@ -225,22 +244,21 @@ function doFight(){
     }
 
     const info = document.createElement('p');
-    info.innerHTML = 'Grey You</br>';
 
     if (enemy.adv) {
-        info.innerHTML += `<img src="${imgPrefix}hourglass.gif" height="30" width="30" style="vertical-align: middle;" alt="Adventures"> ${enemy.adv} adventures`;
+        info.innerHTML = `${goo} ${hourglass} ${enemy.adv} adventures`;
     } else if (enemy.skill) {
-        info.innerHTML += `${enemy.img ? `<img src="${imgPrefix}${enemy.img}" height="30" width="30" style="vertical-align: middle;"> ` : ''}<b>${enemy.skill}</b><br/>${enemy.desc}`;
+        info.innerHTML = `${getSkillImage(enemy.img)} <b>${enemy.skill}</b><br/>${enemy.desc}`;
     } else if (enemy.muscle) {
-        info.innerHTML += `<b>${enemy.muscle} Muscle</b>`;
+        info.innerHTML = `${goo} <b>${enemy.muscle} Muscle</b>`;
     } else if (enemy.mysticality) {
-        info.innerHTML += `<b>${enemy.mysticality} Mysticality</b>`;
+        info.innerHTML = `${goo} <b>${enemy.mysticality} Mysticality</b>`;
     } else if (enemy.moxie) {
-        info.innerHTML += `<b>${enemy.moxie} Moxie</b>`;
+        info.innerHTML = `${goo} <b>${enemy.moxie} Moxie</b>`;
     } else if (enemy.hp) {
-        info.innerHTML += `<b>${enemy.hp} HP</b>`;
+        info.innerHTML = `${goo} <b>${enemy.hp} HP</b>`;
     } else if (enemy.mp) {
-        info.innerHTML += `<b>${enemy.mp} MP</b>`;
+        info.innerHTML = `${goo} <b>${enemy.mp} MP</b>`;
     }
 
     monster.after(info);
@@ -287,8 +305,7 @@ function doCharsheet() {
     const skillsList = missingSkills.map(item => `<tr${(isOdd = !isOdd) ? ' style="background: #eee;"' : ''}>
         <th>
             <a onclick="javascript:poop('desc_skill.php?whichskill=${item[1].id}&self=true','skill', 350, 300)">
-                ${item[1].img ? `<img src="${imgPrefix}${item[1].img}" height="30" width="30" style="vertical-align: middle;"> ` : ''}
-                ${item[0]}
+                ${getSkillImage(item[1].img)} ${item[0]}
             </a>
         </th>
         <td>${item[1].enemy}</td>
@@ -301,12 +318,12 @@ function doCharsheet() {
     const container = document.createElement('center');
 
     container.innerHTML = `
-        <br/><b>Total remaining adventures: ${totalMissingAdventures}</b><br/><br/>
+        <br/><b>${hourglass} Total remaining adventures: ${totalMissingAdventures}</b><br/><br/>
         <table><tr>
         ${adventureList.join('')}
         </tr></table>
         <br/><br/>
-        <br/><b>Total remaining skills: ${totalMissingSkills}</b><br/><br/>
+        <br/><b>${goo} Total remaining skills: ${totalMissingSkills}</b><br/><br/>
         <table><tr>
         ${skillsList.join('')}
         </tr></table>
@@ -324,7 +341,7 @@ function doCharsheet() {
             desc.innerHTML = `&nbsp;&nbsp;${skill.desc}`;
             knownSkill.after(desc);
             if (skill.img) {
-                knownSkill.innerHTML = `<img src="${imgPrefix}${skill.img}" height="30" width="30" style="vertical-align: middle;"> ${knownSkill.innerHTML}`;
+                knownSkill.innerHTML = `${getSkillImage(skill.img)} ${knownSkill.innerHTML}`;
             }
         }
     })
