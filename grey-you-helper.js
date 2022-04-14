@@ -14,7 +14,7 @@ const NO_SKILL_IMAGES = false;
 /********* Helper functions ********/
 /***********************************/
 const enemies = new Map([
-    ['Pseudopod Slap', {skill: 'Pseudopod Slap', desc: 'Deals 10 damage (starting skill)', img: 'goocon10.gif', id: 27000}],
+    ['Pseudopod Slap', {skill: 'Pseudopod Slap', desc: 'Deals <b>10</b> damage (starting skill)', img: 'goocon10.gif', id: 27000}],
     ['remaindered skeleton', {skill: 'Hardslab', desc: 'Deal your Muscle in physical damage (no bonuses)', zone: 'Skeleton Store', img: 'goocon2.gif', id: 27001}],
     ['crêep', {skill: 'Telekinetic Murder', desc: 'Deal your Mysticality in physical damage (no bonuses)', zone: 'Madness Bakery', img: 'goocon3.gif', id: 27002}],
     ['sewer snake with a sewer snake in it', {skill: 'Snakesmack', desc: 'Deal your Moxie in physical damage (no bonuses)', zone: 'Overgrown Lot', img: 'goocon4.gif', id: 27003}],
@@ -28,8 +28,8 @@ const enemies = new Map([
     ['lihc', {skill: 'Curses Library', desc: '<font color="gray"><b>+5 Spooky Damage</b></font>', zone: 'Unquiet Garves', img: 'goocon11.gif', id: 27011}],
     ['beanbat', {skill: 'Exhaust Tubules', desc: '<font color="green"><b>+5 Stench Damage</b></font>', zone: 'Beanbat Chamber', img: 'goocon12.gif', id: 27012}],
     ['Knob Goblin Harem Girl', {skill: 'Camp Subroutines', desc: '<font color="blueviolet"><b>+5 Sleaze Damage</b></font>', zone: 'Cobb\'s Knob Harem', img: 'goocon13.gif', id: 27013}],
-    ['The Boss Bat', {skill: 'Grey Noise', desc: 'Deals 5 damage plus any bonus elemental damage you have', zone: 'Boss Bat\'s Lair', img: 'goocon14.gif', id: 27014}],
-    ['Knob Goblin Elite Guard', {skill: 'Advanced Exo-Alloy', desc: 'Damage Absorption +100', zone: 'Cobb\'s Knob Barracks', img: 'goocon15.gif', id: 27015}],
+    ['The Boss Bat', {skill: 'Grey Noise', desc: 'Deals <b>5</b> damage plus any bonus elemental damage you have', zone: 'Boss Bat\'s Lair', img: 'goocon14.gif', id: 27014}],
+    ['Knob Goblin Elite Guard', {skill: 'Advanced Exo-Alloy', desc: 'Damage Absorption <b>+100</b>', zone: 'Cobb\'s Knob Barracks', img: 'goocon15.gif', id: 27015}],
     ['cubist bull', {skill: 'Localized Vacuum', desc: '<font color="red"><b>So-So Hot Resistance (+2)</b></font>', zone: 'Haunted Gallery', img: 'goocon16.gif', id: 27016}],
     ['eXtreme cross-country hippy', {skill: 'Microweave', desc: '<font color="blue"><b>So-So Cold Resistance (+2)</b></font>', zone: 'eXtreme Slope', img: 'goocon17.gif', id: 27017}],
     ['Claybender Sorcerer Ghost', {skill: 'Ectogenesis', desc: '<font color="gray"><b>So-So Spooky Resistance (+2)</b></font>', zone: 'A-Boo Peak', img: 'goocon18.gif', id: 27018}],
@@ -40,42 +40,42 @@ const enemies = new Map([
     ['animated ornate nightstand', {skill: 'Ominous Substrate', desc: '<font color="gray"><b>+10 Spooky Damage</b></font>', zone: 'Haunted Bedroom', img: 'goocon23.gif', id: 27023}],
     ['drunk goat', {skill: 'Secondary Fermentation', desc: '<font color="green"><b>+10 Stench Damage</b></font>', zone: 'Goatlet', img: 'goocon24.gif', id: 27024}],
     ['smut orc screwer', {skill: 'Procgen Ribaldry', desc: '<font color="blueviolet"><b>+10 Sleaze Damage</b></font>', zone: 'Smut Orc Logging Camp', img: 'goocon25.gif', id: 27025}],
-    ['Knob Goblin Alchemist', {skill: 'Solid Fuel', desc: '+10 Adventure(s) per day', zone: 'Cobb\'s Knob Laboratory', img: 'goocon26.gif', id: 27026}],
-    ['zombie waltzers', {skill: 'Autochrony', desc: '+10 Adventure(s) per day', zone: 'Haunted Ballroom', img: 'goocon27.gif', id: 27027}],
-    ['Pr Imp', {skill: 'Temporal Hyperextension', desc: '+10 Adventure(s) per day', zone: 'Laugh Floor', img: 'goocon28.gif', id: 27028}],
-    ['junksprite bender', {skill: 'Propagation Drive', desc: '+20% Item Drops from Monsters', zone: 'Old Landfill', img: 'goocon29.gif', id: 27029}],
-    ['me4t begZ0r', {skill: 'Financial Spreadsheets', desc: '+40% Meat from Monsters', zone: 'Valley of Rof L\'m Fao', img: 'goocon30.gif', id: 27030}],
-    ['Spectral Jellyfish', {skill: 'Phase Shift', desc: 'Gives Effect: Shifted Phase (10 Adventures) ', zone: 'Menagerie Level 3', img: 'goocon31.gif', id: 27031}],
-    ['white lion', {skill: 'Piezoelectric Honk', desc: 'Gives Effect: Hooooooooonk! (10 Adventures) ++combat', zone: 'Whitey\'s Grove', img: 'goocon32.gif', id: 27032}],
-    ['Big Wheelin\' Twins', {skill: 'Overclocking', desc: '+X% Combat Initiative (Scales with your Muscle)', zone: 'Twin Peak', img: 'goocon33.gif', id: 27033}],
-    ['pooltergeist', {skill: 'Subatomic Hardening', desc: 'Damage Reduction: X (Scales with your Muscle)', zone: 'Haunted Billiards Room', img: 'goocon34.gif', id: 27034}],
-    ['suckubus', {skill: 'Gravitational Compression', desc: '+Y% Item Drops from Monsters (Y = 0.2 * Base Mys)', zone: 'Infernal Rackets Backstage', img: 'goocon25.gif', id: 27035}],
-    ['mind flayer', {skill: 'Hivemindedness', desc: 'Regenerate Y MP per Adventure (Scales with your Mysticality)', zone: 'Dungeons of Doom', img: 'goocon36.gif', id: 27036}],
-    ['anglerbush', {skill: 'Ponzi Apparatus', desc: '+Z% Meat from Monsters (Scales with your Moxie)', zone: 'Haunted Conservatory', img: 'goocon37.gif', id: 27037}],
-    ['Carnivorous Moxie Weed', {skill: 'Fluid Dynamics Simulation', desc: 'Regenerate X HP per Adventure (Scales with your Muscle)', zone: 'Menagerie Level 2', img: 'goocon38.gif', id: 27038}],
+    ['Knob Goblin Alchemist', {skill: 'Solid Fuel', desc: '<b>+10</b> Adventure(s) per day', zone: 'Cobb\'s Knob Laboratory', img: 'goocon26.gif', id: 27026}],
+    ['zombie waltzers', {skill: 'Autochrony', desc: '<b>+10</b> Adventure(s) per day', zone: 'Haunted Ballroom', img: 'goocon27.gif', id: 27027}],
+    ['Pr Imp', {skill: 'Temporal Hyperextension', desc: '<b>+10</b> Adventure(s) per day', zone: 'Laugh Floor', img: 'goocon28.gif', id: 27028}],
+    ['junksprite bender', {skill: 'Propagation Drive', desc: '<b>+20%</b> Item Drops from Monsters', zone: 'Old Landfill', img: 'goocon29.gif', id: 27029}],
+    ['me4t begZ0r', {skill: 'Financial Spreadsheets', desc: '<b>+40%</b> Meat from Monsters', zone: 'Valley of Rof L\'m Fao', img: 'goocon30.gif', id: 27030}],
+    ['Spectral Jellyfish', {skill: 'Phase Shift', desc: 'Gives Effect: Shifted Phase (10 Adventures) <b>--combat</b>', zone: 'Menagerie Level 3', img: 'goocon31.gif', id: 27031}],
+    ['white lion', {skill: 'Piezoelectric Honk', desc: 'Gives Effect: Hooooooooonk! (10 Adventures) <b>++combat</b>', zone: 'Whitey\'s Grove', img: 'goocon32.gif', id: 27032}],
+    ['Big Wheelin\' Twins', {skill: 'Overclocking', desc: '<b>+X%</b> Combat Initiative (Scales with your Muscle)', zone: 'Twin Peak', img: 'goocon33.gif', id: 27033, getDesc: (mus, mys, mox) => `<b>+${Math.min(mus, 300)}%</b> Combat Initiative (Scales with your Muscle)`}],
+    ['pooltergeist', {skill: 'Subatomic Hardening', desc: 'Damage Reduction: <b>X</b> (Scales with your Muscle)', zone: 'Haunted Billiards Room', img: 'goocon34.gif', id: 27034, getDesc: (mus, mys, mox) => `Damage Reduction: <b>${Math.min(Math.ceil(mus / 10), 30)}</b> (Scales with your Muscle)`}],
+    ['suckubus', {skill: 'Gravitational Compression', desc: '<b>+Y%</b> Item Drops from Monsters (Scales with your Mysticality)', zone: 'Infernal Rackets Backstage', img: 'goocon25.gif', id: 27035, getDesc: (mus, mys, mox) => `<b>+${Math.min(Math.ceil(mys / 5), 100)}%</b> Item Drops from Monsters (Scales with your Mysticality)`}],
+    ['mind flayer', {skill: 'Hivemindedness', desc: 'Regenerate <b>Y</b> MP per Adventure (Scales with your Mysticality)', zone: 'Dungeons of Doom', img: 'goocon36.gif', id: 27036, getDesc: (mus, mys, mox) => `Regenerate <b>${Math.min(Math.ceil(mys / 10), 100)}</b> MP per Adventure (Scales with your Mysticality)`}],
+    ['anglerbush', {skill: 'Ponzi Apparatus', desc: '<b>+Z%</b> Meat from Monsters (Scales with your Moxie)', zone: 'Haunted Conservatory', img: 'goocon37.gif', id: 27037, getDesc: (mus, mys, mox) => `<b>+${Math.min(Math.ceil(mox / 2.5), 200)}%</b> Meat from Monsters (Scales with your Moxie)`}],
+    ['Carnivorous Moxie Weed', {skill: 'Fluid Dynamics Simulation', desc: 'Regenerate <b>X</b> HP per Adventure (Scales with your Muscle)', zone: 'Menagerie Level 2', img: 'goocon38.gif', id: 27038, getDesc: (mus, mys, mox) => `Regenerate <b>${Math.min(Math.ceil(mox / 5), 100)}</b> HP per Adventure (Scales with your Moxie)`}],
     ['stuffed moose head', {skill: 'Nantlers', desc: 'Deals your Muscle in damage (includes bonus damage)', zone: 'Haunted Storage Room', img: 'goocon39.gif', id: 27039}],
     ['Jacob\'s adder', {skill: 'Nanoshock', desc: 'Deals your Mysticality in damage (includes bonus damage)', zone: 'Haunted Laboratory', img: 'goocon40.gif', id: 27040}],
     ['spooky music box', {skill: 'Audioclasm', desc: 'Deals your Moxie in damage (includes bonus damage)', zone: 'Haunted Nursery', img: 'goocon41.gif', id: 27041}],
     ['pygmy janitor', {skill: 'System Sweep', desc: 'Deal your Muscle in physical damage.<br/>If this defeats the enemy, it is banished for the rest of the day', zone: 'Hidden Park', img: 'goocon42.gif', id: 27042}],
-    ['drunk pygmy', {skill: 'Double Nanovision', desc: 'Deal your Mysticality in physical damage.<br/>If this defeats the enemy, get +100% item drops for this fight', zone: 'Hidden Bowling Alley', img: 'goocon43.gif', id: 27043}],
-    ['Pygmy Witch Lawyer', {skill: 'Infinite Loop', desc: 'Deal your Moxie in physical damage.<br/>If this defeats enemy, gain 1 muscle, mysticality and moxie', zone: 'Hidden Apartment Building<br/>Hidden Office Building<br/>Hidden Park', img: 'goocon44.gif', id: 27044}],
-    ['black panther', {skill: 'Photonic Shroud', desc: 'Gives Effect: Darkened Photons. (10 Adventures) --combat', zone: 'Black Forest', img: 'goocon45.gif', id: 27045}],
-    ['steam elemental', {skill: 'Steam Mycelia', desc: '+15 Hot Damage', zone: 'Haunted Boiler Room', img: 'goocon47.gif', id: 27047}],
-    ['Snow Queen', {skill: 'Snow-Cooling System', desc: '+15 Cold Damage', zone: 'Icy Peak', img: 'goocon48.gif', id: 27048}],
-    ['possessed wine rack', {skill: 'Legacy Code', desc: '+15 Spooky Damage', zone: 'Haunted Wine Cellar', img: 'goocon49.gif', id: 27049}],
-    ['Flock of Stab-bats', {skill: 'AUTOEXEC.BAT', desc: '+15 Stench Damage', zone: 'Inside the Palindome', img: 'goocon50.gif', id: 27050}],
-    ['Astronomer', {skill: 'Innuendo Circuitry', desc: '+15 Sleaze Damage', zone: 'Hole in the Sky', img: 'goocon51.gif', id: 27051}],
-    ['fan dancer', {skill: 'Subatomic Tango', desc: '+15 Adventure(s) per day', zone: 'Copperhead Club', img: 'goocon52.gif', id: 27052}],
-    ['baseball bat', {skill: 'Extra Innings', desc: '+5 Adventure(s) per day', zone: 'Guano Junction', img: 'goocon2.gif', id: 27053}],
-    ['Bullet Bill', {skill: 'Reloading', desc: '+5 Adventure(s) per day', zone: '8-Bit Realm', img: 'goocon16.gif', id: 27054}],
-    ['rushing bum', {skill: 'Harried', desc: '+5 Adventure(s) per day', zone: 'Sleazy Back Alley', img: 'goocon50.gif', id: 27055}],
-    ['undead elbow macaroni', {skill: 'Temporal Bent', desc: '+5 Adventure(s) per day', zone: 'Haunted Pantry', img: 'goocon5.gif', id: 27056}],
-    ['Sub-Assistant Knob Mad Scientist', {skill: 'Provably Efficient', desc: '+5 Adventure(s) per day', zone: 'Outskirts of Cobb\'s Knob', img: 'goocon25.gif', id: 27057}],
-    ['BASIC Elemental', {skill: 'Basic Improvements', desc: '+5 Adventure(s) per day', zone: 'Menagerie Level 1', img: 'goocon27.gif', id: 27058}],
-    ['shifty pirate', {skill: 'Shifted About', desc: '+5 Adventure(s) per day', zone: 'Obligatory Pirate\'s Cove', img: 'goocon33.gif', id: 27059}],
-    ['ghost miner', {skill: 'Spooky Veins', desc: '+10 Adventure(s) per day', zone: 'Knob Shaft', img: 'goocon40.gif', id: 27060}],
-    ['dopey 7-Foot Dwarf', {skill: 'Seven Foot Feelings', desc: '+5 Adventure(s) per day', zone: 'Itznotyerzitz Mine', img: 'goocon32.gif', id: 27061}],
-    ['banshee librarian', {skill: 'Self-Actualized', desc: '+5 Adventure(s) per day', zone: 'Haunted Library', img: 'goocon49.gif', id: 27062}],
+    ['drunk pygmy', {skill: 'Double Nanovision', desc: 'Deal your Mysticality in physical damage.<br/>If this defeats the enemy, get <b>+100%</b> item drops for this fight', zone: 'Hidden Bowling Alley', img: 'goocon43.gif', id: 27043}],
+    ['pygmy witch lawyer', {skill: 'Infinite Loop', desc: 'Deal your Moxie in physical damage.<br/>If this defeats enemy, gain <b>1</b> muscle, mysticality and moxie', zone: 'Hidden Apartment Building<br/>Hidden Office Building<br/>Hidden Park', img: 'goocon44.gif', id: 27044}],
+    ['black panther', {skill: 'Photonic Shroud', desc: 'Gives Effect: Darkened Photons. (10 Adventures) <b>--combat</b>', zone: 'Black Forest', img: 'goocon45.gif', id: 27045}],
+    ['steam elemental', {skill: 'Steam Mycelia', desc: '<font color="red"><b>+15 Hot Damage</b></font>', zone: 'Haunted Boiler Room', img: 'goocon47.gif', id: 27047}],
+    ['Snow Queen', {skill: 'Snow-Cooling System', desc: '<font color="blue"><b>+15 Cold Damage</b></font>', zone: 'Icy Peak', img: 'goocon48.gif', id: 27048}],
+    ['possessed wine rack', {skill: 'Legacy Code', desc: '<font color="gray"><b>+15 Spooky Damage</b></font>', zone: 'Haunted Wine Cellar', img: 'goocon49.gif', id: 27049}],
+    ['Flock of Stab-bats', {skill: 'AUTOEXEC.BAT', desc: '<font color="green"><b>+15 Stench Damage</b></font>', zone: 'Inside the Palindome', img: 'goocon50.gif', id: 27050}],
+    ['Astronomer', {skill: 'Innuendo Circuitry', desc: '<font color="blueviolet"><b>+15 Sleaze Damage</b></font>', zone: 'Hole in the Sky', img: 'goocon51.gif', id: 27051}],
+    ['fan dancer', {skill: 'Subatomic Tango', desc: '<b>+15</b> Adventure(s) per day', zone: 'Copperhead Club', img: 'goocon52.gif', id: 27052}],
+    ['baseball bat', {skill: 'Extra Innings', desc: '<b>+5</b> Adventure(s) per day', zone: 'Guano Junction', img: 'goocon2.gif', id: 27053}],
+    ['Bullet Bill', {skill: 'Reloading', desc: '<b>+5</b> Adventure(s) per day', zone: '8-Bit Realm', img: 'goocon16.gif', id: 27054}],
+    ['rushing bum', {skill: 'Harried', desc: '<b>+5</b> Adventure(s) per day', zone: 'Sleazy Back Alley', img: 'goocon50.gif', id: 27055}],
+    ['undead elbow macaroni', {skill: 'Temporal Bent', desc: '<b>+5</b> Adventure(s) per day', zone: 'Haunted Pantry', img: 'goocon5.gif', id: 27056}],
+    ['Sub-Assistant Knob Mad Scientist', {skill: 'Provably Efficient', desc: '<b>+5</b> Adventure(s) per day', zone: 'Outskirts of Cobb\'s Knob', img: 'goocon25.gif', id: 27057}],
+    ['BASIC Elemental', {skill: 'Basic Improvements', desc: '<b>+5</b> Adventure(s) per day', zone: 'Menagerie Level 1', img: 'goocon27.gif', id: 27058}],
+    ['shifty pirate', {skill: 'Shifted About', desc: '<b>+5</b> Adventure(s) per day', zone: 'Obligatory Pirate\'s Cove', img: 'goocon33.gif', id: 27059}],
+    ['ghost miner', {skill: 'Spooky Veins', desc: '<b>+10</b> Adventure(s) per day', zone: 'Knob Shaft', img: 'goocon40.gif', id: 27060}],
+    ['dopey 7-Foot Dwarf', {skill: 'Seven Foot Feelings', desc: '<b>+5</b> Adventure(s) per day', zone: 'Itznotyerzitz Mine', img: 'goocon32.gif', id: 27061}],
+    ['banshee librarian', {skill: 'Self-Actualized', desc: '<b>+5</b> Adventure(s) per day', zone: 'Haunted Library', img: 'goocon49.gif', id: 27062}],
 
     ['batrat', {adv: 5, zone: 'Batrat and Ratbat Burrow'}],
     ['L imp', {adv: 5, zone: 'Dark Elbow of the Woods<br/>Pandamonium Slums'}],
@@ -264,6 +264,38 @@ function doFight(){
     monster.after(info);
 }
 
+function getBase(el) {
+    const content = el.nextElementSibling.innerText;
+
+    if (content.includes('base')) {
+        return +(content.match(/(?<=base:\s)\d+/)[0]);
+    }
+
+    return +(content.trim());
+}
+
+function getStats() {
+    const labels = Array.from(document.querySelectorAll('td[align="right"]'));
+
+    let mus = 0, mys = 0, mox = 0;
+
+    labels.find(label => {
+        if (label.innerText === 'Muscle:') {
+            mus = getBase(label);
+        } else if (label.innerText === 'Mysticality:') {
+            mys = getBase(label);
+        } else if (label.innerText === 'Moxie:') {
+            mox = getBase(label);
+        }
+
+        if (mus > 0 && mys > 0 && mox > 0) {
+            return true;
+        }
+    });
+
+    return [mus, mys, mox];
+}
+
 function doCharsheet() {
     const bs = Array.from(document.querySelectorAll('b'));
     let absorbTable;
@@ -292,6 +324,7 @@ function doCharsheet() {
     const adventureList = missingAdventures.map(item => `<tr${(isOdd = !isOdd) ? ' style="background: #eee;"' : ''}><td>${item[1].adv}</td><td>${item[0]}</td><td>${item[1].zone}</td></tr$>`);
 
 
+    const stats = getStats();
     const skills = skillTable.innerText;
     const skillMap = new Map(Array.from(
         enemies.entries())
@@ -310,7 +343,7 @@ function doCharsheet() {
         </th>
         <td>${item[1].enemy}</td>
         <td>${item[1].zone}</td>
-        <td>${item[1].desc}</td>
+        <td>${item[1].getDesc?.(...stats) ?? item[1].desc}</td>
         </tr>
     `);
 
@@ -319,12 +352,12 @@ function doCharsheet() {
 
     container.innerHTML = `
         <br/><b>${hourglass} Total remaining adventures: ${totalMissingAdventures}</b><br/><br/>
-        <table><tr>
+        <table cellspacing="0" cellpadding="3"><tr>
         ${adventureList.join('')}
         </tr></table>
         <br/><br/>
         <br/><b>${goo} Total remaining skills: ${totalMissingSkills}</b><br/><br/>
-        <table><tr>
+        <table cellspacing="0" cellpadding="3"><tr>
         ${skillsList.join('')}
         </tr></table>
     `;
@@ -338,7 +371,7 @@ function doCharsheet() {
         if (skill) {
             knownSkill.style.fontWeight = 'bold';
             const desc = document.createElement('span');
-            desc.innerHTML = `&nbsp;&nbsp;${skill.desc}`;
+            desc.innerHTML = `&nbsp;&nbsp;${skill.getDesc?.(...stats) ?? skill.desc}`;
             knownSkill.after(desc);
             if (skill.img) {
                 knownSkill.innerHTML = `${getSkillImage(skill.img)} ${knownSkill.innerHTML}`;
