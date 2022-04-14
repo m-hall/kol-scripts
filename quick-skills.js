@@ -199,7 +199,7 @@
             description: '+Adv per booze potency',
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/odetobooze.gif'
         },
-        {},
+        { name: 'standard' },
         {
             id: 'umbrella',
             title: 'unbreakable umbrella',
@@ -225,6 +225,34 @@
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/backcamera.gif',
             action: () => {
                 window.top.frames.mainpane.location = `/inventory.php?action=bcmode`;
+            }
+        },
+        { name: 'old' },
+        {
+            id: 'barrel',
+            title: 'Shrine to the Barrel god',
+            description: 'Select a daily gift',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/barrelbig.gif',
+            action: () => {
+                window.top.frames.mainpane.location = `/da.php?barrelshrine=1`;
+            }
+        },
+        {
+            id: 'florist',
+            title: 'Florist Friar',
+            description: 'Pick flowers for the most recent zone',
+            image: 'https://s3.amazonaws.com/images.kingdomofloathing.com/itemimages/floristform.gif',
+            action: () => {
+                window.top.frames.mainpane.location = `/place.php?whichplace=forestvillage&action=fv_friar`;
+            }
+        },
+        {
+            id: 'chateau',
+            title: 'Chateau Mantagna',
+            description: 'Go to your Chateau',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/cmkey.gif',
+            action: () => {
+                window.top.frames.mainpane.location = `/place.php?whichplace=chateau`;
             }
         }
     ];
