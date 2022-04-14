@@ -157,6 +157,7 @@ const enemies = new Map([
     ['Fallen Archfiend', {muscle: 10}],
     ['Fitness Giant', {muscle: 10}],
     ['toothy sklelton', {muscle: 10}],
+    ['tomb servant', {muscle: 10}],
 
     ['baa-relief sheep', {mysticality: 3}],
     ['fiendish can of asparagus', {mysticality: 5}],
@@ -167,7 +168,6 @@ const enemies = new Map([
     ['Hellion', {mysticality: 10}],
     ['Possibility Giant', {mysticality: 10}],
     ['seline lihc', {mysticality: 10}],
-    ['tomb servant', {mysticality: 10}],
 
     ['craven carven raven', {moxie: 3}],
     ['half-orc hobo', {moxie: 5}],
