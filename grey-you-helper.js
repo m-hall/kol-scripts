@@ -3,9 +3,13 @@
 // @description  Shows Skills, bonus adventures and bonus skills gained from monsters in Grey You. Also includes a summary of available boosts in the characters sheet.
 // @include      *www.kingdomofloathing.com/fight.php*
 // @include      http://127.0.0.1:60080/fight.php*
+// @include      *www.kingdomofloathing.com/charpane.php*
+// @include      http://127.0.0.1:60080/charpane.php*
 // @include      *www.kingdomofloathing.com/charsheet.php*
 // @include      http://127.0.0.1:60080/charsheet.php*
 // @icon         https://www.google.com/s2/favicons?domain=kingdomofloathing.com
+// @grant        GM_getValue
+// @grant        GM_setValue
 // ==/UserScript==
 
 const NO_SKILL_IMAGES = false;
@@ -197,6 +201,10 @@ const nameVariants = [
 const imgPrefix = 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/';
 const hourglass = getImage('hourglass.gif', 'Adventures');
 const goo = getImage('greygooball.gif', 'Grey Goo');
+const goose = getImage('greygoose.gif', 'Grey Goose');
+const currentUser = GM_getValue('goo--currentUser');
+
+const goosed = GM_getValue('goo--' + currentUser) || [];
 
 function getImage(src, alt, size=30) {
     return `<img src="${imgPrefix}${src}" height="${size}" width="${size}" style="vertical-align: middle;" alt="${alt}">`
@@ -212,13 +220,9 @@ function getSkillImage(src) {
     return getImage(src);
 }
 
-/***********************************/
-/******** Section functions ********/
-/***********************************/
-function doFight(){
+function doFight() {
     const monster = document.getElementById('monname');
     let name = monster.innerText;
-
 
     let enemy = enemies.get(name);
 
@@ -245,8 +249,16 @@ function doFight(){
 
     const info = document.createElement('p');
 
+    if (document.body.innerText.includes('reforms into an identical copy')) {
+        goosed.push(name);
+        GM_setValue('goo--' + currentUser, goosed);
+    }
+
     if (enemy.adv) {
         info.innerHTML = `${goo} ${hourglass} ${enemy.adv} adventures`;
+        if (!goosed.includes(name)) {
+            info.innerHTML += `<br/> ${goose} <b>You have NOT goosed this enemy</b>`;
+        }
     } else if (enemy.skill) {
         info.innerHTML = `${getSkillImage(enemy.img)} <b>${enemy.skill}</b><br/>${enemy.desc}`;
     } else if (enemy.muscle) {
@@ -259,6 +271,10 @@ function doFight(){
         info.innerHTML = `${goo} <b>${enemy.hp} HP</b>`;
     } else if (enemy.mp) {
         info.innerHTML = `${goo} <b>${enemy.mp} MP</b>`;
+    }
+
+    if (goosed.includes(name)) {
+        info.innerHTML += `<br/> ${goose} You have goosed this enemy`;
     }
 
     monster.after(info);
@@ -321,7 +337,18 @@ function doCharsheet() {
     const advMap = new Map(Array.from(enemies.entries()).filter(item => !!item[1].adv));
     const missingAdventures = Array.from(advMap.entries()).filter(item => !absorbs.includes(item[0]));
     const totalMissingAdventures = missingAdventures.reduce((val, item) => val + item[1].adv, 0);
-    const adventureList = missingAdventures.map(item => `<tr${(isOdd = !isOdd) ? ' style="background: #eee;"' : ''}><td>${item[1].adv}</td><td>${item[0]}</td><td>${item[1].zone}</td></tr$>`);
+    const missingKeys = missingAdventures.map(item => item[0]);
+    const adventureList = Array.from(advMap.entries()).map(item => {
+        const doneAbsorb = !missingKeys.includes(item[0]);
+        const doneGoosed = goosed.includes(item[0]);
+        return `<tr style="display:none; ${(isOdd = !isOdd) ? 'background: #eee;' : ''}" class='advrow ${doneAbsorb ? 'absorbed' : 'not-absorbed'} ${doneGoosed ? 'goosed' : 'not-goosed'}'>
+            <td>${doneAbsorb ? '<b>✓</b>' : ''}</td>
+            <td>${doneGoosed ? '<b>✓</b>' : ''}</td>
+            <td>${item[1].adv}</td>
+            <td>${item[0]}</td>
+            <td>${item[1].zone}</td>
+        </tr>`
+    });
 
 
     const stats = getStats();
@@ -352,7 +379,29 @@ function doCharsheet() {
 
     container.innerHTML = `
         <br/><b>${hourglass} Total remaining adventures: ${totalMissingAdventures}</b><br/><br/>
-        <table cellspacing="0" cellpadding="3"><tr>
+        <style>
+            .advButton {
+                width: 200px;
+                margin: 5px;
+                padding: 5px;
+                border: 1px solid #888;
+            }
+            .advButton:hover {
+                background: #ccc;
+                cursor: pointer;
+            }
+        </style>
+        <br/>
+            <span class='advButton' data-show=".advrow">Show all</span>
+            <span class='advButton' data-show=".not-absorbed">Remaining Absorbs</span>
+            <span class='advButton' data-show=".not-goosed">Remaining Gooses</span>
+            <span class='advButton' data-show=".not-absorbed.not-goosed">Remaining both</span>
+            <span class='advButton' data-show=".not-absorbed, .not-goosed">Remaining either</span>
+        <br/><br/>
+        <table cellspacing="0" cellpadding="3">
+        <tr>
+        <th>${goo}</th><th>${goose}</th><th>${hourglass}</th><th>Monster</th><th>Zone</th></tr>
+        <tr>
         ${adventureList.join('')}
         </tr></table>
         <br/><br/>
@@ -361,7 +410,14 @@ function doCharsheet() {
         ${skillsList.join('')}
         </tr></table>
     `;
-    document.body.appendChild(container);
+
+    container.querySelectorAll('.advButton').forEach(button => button.addEventListener('click', function () {
+        document.querySelectorAll('.advrow').forEach(row => row.style.display = 'none');
+        document.querySelectorAll(this.dataset.show).forEach(row => row.style.display = '');
+        GM_setValue(`goo--${currentUser}-show`, this.dataset.show);
+    }));
+    const show = GM_setValue(`goo--${currentUser}-show`);
+    container.querySelectorAll(show || '.advrow').forEach(row => row.style.display = '');
 
 
     const knownSkills = Array.from(skillTable.querySelectorAll('a'));
@@ -377,7 +433,13 @@ function doCharsheet() {
                 knownSkill.innerHTML = `${getSkillImage(skill.img)} ${knownSkill.innerHTML}`;
             }
         }
-    })
+    });
+
+    document.body.appendChild(container);
+}
+
+function doCharpane() {
+    GM_setValue('goo--currentUser', document.querySelector('a[href*=charsheet]').innerText);
 }
 
 
@@ -387,5 +449,8 @@ switch(window.location.pathname){
         break;
     case '/charsheet.php':
         doCharsheet();
+        break;
+    case '/charpane.php':
+        doCharpane();
         break;
 }
