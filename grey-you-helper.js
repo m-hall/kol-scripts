@@ -416,7 +416,7 @@ function doCharsheet() {
         document.querySelectorAll(this.dataset.show).forEach(row => row.style.display = '');
         GM_setValue(`goo--${currentUser}-show`, this.dataset.show);
     }));
-    const show = GM_setValue(`goo--${currentUser}-show`);
+    const show = GM_getValue(`goo--${currentUser}-show`);
     container.querySelectorAll(show || '.advrow').forEach(row => row.style.display = '');
 
 
