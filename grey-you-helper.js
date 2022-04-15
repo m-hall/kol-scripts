@@ -439,7 +439,8 @@ function doCharsheet() {
 }
 
 function doCharpane() {
-    GM_setValue('goo--currentUser', document.querySelector('a[href*=charsheet]').innerText);
+    const user = document.querySelector('td[valign=center] a[href*=charsheet]');
+    GM_setValue('goo--currentUser', user.innerText);
 }
 
 
