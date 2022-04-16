@@ -18,6 +18,10 @@
     const [area, zone] = Array.from(document.querySelectorAll('#nudgeblock+center a'));
     let recents = GM_getValue(RECENT_KEY + user.innerText) || [];
 
+    if (!area || !zone) {
+        return;
+    }
+
     const existingIndex = recents.findIndex(recent => recent.href === zone.href);
     if (existingIndex >= 0) {
         recents.splice(existingIndex, 1);
