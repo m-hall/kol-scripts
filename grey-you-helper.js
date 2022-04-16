@@ -1,12 +1,16 @@
 // ==UserScript==
 // @name         Grey You Helper
 // @description  Shows Skills, bonus adventures and bonus skills gained from monsters in Grey You. Also includes a summary of available boosts in the characters sheet.
+// @include      *www.kingdomofloathing.com/game.php*
+// @include      http://127.0.0.1:60080/game.php*
 // @include      *www.kingdomofloathing.com/fight.php*
 // @include      http://127.0.0.1:60080/fight.php*
 // @include      *www.kingdomofloathing.com/charpane.php*
 // @include      http://127.0.0.1:60080/charpane.php*
 // @include      *www.kingdomofloathing.com/charsheet.php*
 // @include      http://127.0.0.1:60080/charsheet.php*
+// @include      *www.kingdomofloathing.com/afterlife.php*
+// @include      http://127.0.0.1:60080/afterlife.php*
 // @icon         https://www.google.com/s2/favicons?domain=kingdomofloathing.com
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -336,11 +340,17 @@ function doCharsheet() {
     const absorbs = absorbTable.innerText;
     const advMap = new Map(Array.from(enemies.entries()).filter(item => !!item[1].adv));
     const missingAdventures = Array.from(advMap.entries()).filter(item => !absorbs.includes(item[0]));
-    const totalMissingAdventures = missingAdventures.reduce((val, item) => val + item[1].adv, 0);
+    let remainingAdventures = 0, gooseAdventures = 0;
     const missingKeys = missingAdventures.map(item => item[0]);
     const adventureList = Array.from(advMap.entries()).map(item => {
         const doneAbsorb = !missingKeys.includes(item[0]);
         const doneGoosed = goosed.includes(item[0]);
+        if (!doneAbsorb) {
+            remainingAdventures += item[1].adv;
+        }
+        if (!doneGoosed) {
+            gooseAdventures += item[1].adv;
+        }
         return `<tr style="display:none; ${(isOdd = !isOdd) ? 'background: #eee;' : ''}" class='advrow ${doneAbsorb ? 'absorbed' : 'not-absorbed'} ${doneGoosed ? 'goosed' : 'not-goosed'}'>
             <td>${doneAbsorb ? '<b>✓</b>' : ''}</td>
             <td>${doneGoosed ? '<b>✓</b>' : ''}</td>
@@ -378,26 +388,29 @@ function doCharsheet() {
     const container = document.createElement('center');
 
     container.innerHTML = `
-        <br/><b>${hourglass} Total remaining adventures: ${totalMissingAdventures}</b><br/><br/>
+        <div>
+            <b>${hourglass} Remaining adventures: ${remainingAdventures}, gooses: ${gooseAdventures}, total: ${remainingAdventures + gooseAdventures}</b>
+            <span class='advButton' data-reset="goose">Reset gooses</span>
+        </div><br/>
         <style>
             .advButton {
-                width: 200px;
                 margin: 5px;
                 padding: 5px;
                 border: 1px solid #888;
+                display: inline-block;
             }
             .advButton:hover {
                 background: #ccc;
                 cursor: pointer;
             }
         </style>
-        <br/>
+        <div>
             <span class='advButton' data-show=".advrow">Show all</span>
             <span class='advButton' data-show=".not-absorbed">Remaining Absorbs</span>
             <span class='advButton' data-show=".not-goosed">Remaining Gooses</span>
             <span class='advButton' data-show=".not-absorbed.not-goosed">Remaining both</span>
             <span class='advButton' data-show=".not-absorbed, .not-goosed">Remaining either</span>
-        <br/><br/>
+        </div><br/>
         <table cellspacing="0" cellpadding="3">
         <tr>
         <th>${goo}</th><th>${goose}</th><th>${hourglass}</th><th>Monster</th><th>Zone</th></tr>
@@ -412,6 +425,10 @@ function doCharsheet() {
     `;
 
     container.querySelectorAll('.advButton').forEach(button => button.addEventListener('click', function () {
+        if (this.dataset.reset === 'goose') {
+            GM_setValue('goo--' + currentUser, []);
+            window.location.reload();
+        }
         document.querySelectorAll('.advrow').forEach(row => row.style.display = 'none');
         document.querySelectorAll(this.dataset.show).forEach(row => row.style.display = '');
         GM_setValue(`goo--${currentUser}-show`, this.dataset.show);
@@ -443,8 +460,19 @@ function doCharpane() {
     GM_setValue('goo--currentUser', user.innerText);
 }
 
+function doGame() {
+    GM_setValue('goo--currentUser', undefined);
+}
+
+function doAfterlife() {
+    GM_setValue(`goo--${currentUser}`, []);
+}
+
 
 switch(window.location.pathname){
+    case '/game.php':
+        doGame();
+        break;
     case '/fight.php':
         doFight();
         break;
@@ -453,5 +481,8 @@ switch(window.location.pathname){
         break;
     case '/charpane.php':
         doCharpane();
+        break;
+    case '/afterlife.php':
+        doAfterlife();
         break;
 }
