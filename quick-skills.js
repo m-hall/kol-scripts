@@ -254,7 +254,29 @@
             action: () => {
                 window.top.frames.mainpane.location = `/place.php?whichplace=chateau`;
             }
-        }
+        },
+        { name: 'grey you' },
+        {
+            id: 27045,
+            cost: 40,
+            title: 'Photonic Shroud',
+            description: '--combat [Black Panther]',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon45.gif',
+        },
+        {
+            id: 27031,
+            cost: 50,
+            title: 'Phase Shift',
+            description: '--combat [Spectral Jellyfish]',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon31.gif',
+        },
+        {
+            id: 27032,
+            cost: 50,
+            title: 'Piezoelectric Honk',
+            description: '++combat [white lion]',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon32.gif',
+        },
     ];
 
     if (window.location.pathname.includes('charpane')) {
