@@ -227,7 +227,7 @@
                 window.top.frames.mainpane.location = `/inventory.php?action=bcmode`;
             }
         },
-        { name: 'old' },
+        { name: 'non-standard' },
         {
             id: 'barrel',
             title: 'Shrine to the Barrel god',
