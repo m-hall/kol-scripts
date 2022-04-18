@@ -212,7 +212,7 @@ function getEnchantmentsTable() {
                         title="Stench">Stench Resistance</a></span> (+3)<br><a target="_blank"
                     href="/thekolwiki/index.php/Damage_Reduction" title="Damage Reduction">Damage Reduction</a>: 10
             </td>
-            <td><span class='monster' data-id="482">War Hippy drill sergeant</span></td>
+            <td><span class='monster' data-id="489">War Hippy Airborne Commander</span></td>
         </tr>
         <tr>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Hobos" title="Category:Hobos">Hobos</a>
@@ -256,7 +256,7 @@ function getEnchantmentsTable() {
                         title="Sleaze">Sleaze Resistance</a></span> (+3)<br><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/MP_Modifiers"
                     title="MP Modifiers">Maximum MP</a> +25
             </td>
-            <td><span class='monster' data-id="528">Frat Warrior drill sergeant</span></td>
+            <td><span class='monster' data-id="506">War Frat Elite Wartender</span></td>
         </tr>
         <tr class='odd'>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Penguins" title="Category:Penguins">Penguins</a>
