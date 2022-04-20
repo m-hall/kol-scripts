@@ -10,12 +10,12 @@
 
 
 const monsters = [
-    { name: 'ninja snowman assassin', id: '1185' },
-    { name: 'lobsterfrogman', id: '529' },
-    { name: 'ghost', id: '950' },
-    { name: 'Fantasy bandit', id: '2060' },
-    { name: 'mountain man', id: '1153' },
-    { name: 'Knob Goblin Embezzler', id: '530' },
+    { name: 'ninja snowman assassin', id: '1185', title: 'trapper shortcut' },
+    { name: 'lobsterfrogman', id: '529', title: 'barrel of gunpowder' },
+    { name: 'ghost', id: '950', title: 'white pixel' },
+    { name: 'Fantasy bandit', id: '2060', title: '5x/day for a fat loot token' },
+    { name: 'mountain man', id: '1153', title: 'trapper ores' },
+    { name: 'Knob Goblin Embezzler', id: '530', title: 'high meat drops' },
 ];
 
 (function() {
@@ -39,6 +39,9 @@ const monsters = [
         span.classList.add('monster');
         span.innerText = monster.name;
         span.dataset.id = monster.id;
+        if (monster.title) {
+            span.title = monster.title;
+        }
         container.append(span);
     });
 
@@ -122,7 +125,7 @@ function getEnchantmentsTable() {
             <td>+10% chance of <a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Critical_Hit_Chance" title="Critical Hit Chance">Critical
                     Hit</a><br><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Muscle_Modifiers" title="Muscle Modifiers">Muscle</a> +20
             </td>
-            <td><span class='monster' data-id="48">beanbat</span></td>
+            <td><span class='monster' data-id="48">beanbat</span><span class='monster' data-id="118">blooper</span></td>
         </tr>
         <tr>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Bugs" title="Category:Bugs">Bugs</a>
@@ -130,7 +133,7 @@ function getEnchantmentsTable() {
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Weapon_Damage" title="Weapon Damage">Weapon Damage</a> +25%<br><a target="_blank"
                     href="/thekolwiki/index.php/MP_Modifiers" title="MP Modifiers">Maximum MP</a> +25%
             </td>
-            <td><span class='monster' data-id="221">swarm of killer bees</span></td>
+            <td><span class='monster' data-id="221">swarm of killer bees</span><span class='monster' data-id="415">black widow</span></td>
         </tr>
         <tr class='odd'>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Constellations"
@@ -140,7 +143,7 @@ function getEnchantmentsTable() {
                     Critical Hit</a><br><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Mysticality_Modifiers"
                     title="Mysticality Modifiers">Mysticality</a> +20
             </td>
-            <td><span class='monster' data-id="184">The Astronomer</span></td>
+            <td><span class='monster' data-id="184">The Astronomer</span><span class='monster' data-id="541">The Camel's Toe</span></td>
         </tr>
         <tr>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Constructs" title="Category:Constructs">Constructs</a>
@@ -176,7 +179,7 @@ function getEnchantmentsTable() {
                         Resistance</a></span> (+3)<br>+25 Damage to <span class="element-stench"><a target="_blank"
                         href="/thekolwiki/index.php/Stench#Spells" title="Stench">Stench Spells</a></span>
             </td>
-            <td><span class='monster' data-id="1185">ninja snowman assassin</span></td>
+            <td><span class='monster' data-id="1185">ninja snowman assassin</span><span class='monster' data-id="1265">rage flame</span></td>
         </tr>
         <tr>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Elves" title="Category:Elves">Elves</a>
@@ -203,7 +206,7 @@ function getEnchantmentsTable() {
                         Damage</a></span><br><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Mysticality_Modifiers"
                     title="Mysticality Modifiers">Mysticality</a> +50%
             </td>
-            <td><span class='monster' data-id="530">Knob Goblin Embezzler</span></td>
+            <td><span class='monster' data-id="530">Knob Goblin Embezzler</span><span class='monster' data-id="263">Knob Goblin Elite Guard Captain</span></td>
         </tr>
         <tr class='odd'>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Hippies" title="Category:Hippies">Hippies</a>
@@ -212,7 +215,7 @@ function getEnchantmentsTable() {
                         title="Stench">Stench Resistance</a></span> (+3)<br><a target="_blank"
                     href="/thekolwiki/index.php/Damage_Reduction" title="Damage Reduction">Damage Reduction</a>: 10
             </td>
-            <td><span class='monster' data-id="489">War Hippy Airborne Commander</span></td>
+            <td><span class='monster' data-id="489">War Hippy Airborne Commander</span><span class='monster' data-id="52">filthy hippy</span></td>
         </tr>
         <tr>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Hobos" title="Category:Hobos">Hobos</a>
@@ -256,7 +259,7 @@ function getEnchantmentsTable() {
                         title="Sleaze">Sleaze Resistance</a></span> (+3)<br><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/MP_Modifiers"
                     title="MP Modifiers">Maximum MP</a> +25
             </td>
-            <td><span class='monster' data-id="506">War Frat Elite Wartender</span></td>
+            <td><span class='monster' data-id="506">War Frat Elite Wartender</span><span class='monster' data-id="577">War Frat Mobile Grill Unit</span></td>
         </tr>
         <tr class='odd'>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Penguins" title="Category:Penguins">Penguins</a>
@@ -282,7 +285,7 @@ function getEnchantmentsTable() {
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Combat_Initiative" title="Combat Initiative">Combat Initiative</a>
                 +50%<br>+50% <a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/HP_Modifiers" title="HP Modifiers">Maximum HP</a>
             </td>
-            <td><span class='monster' data-id="1800">angry mushroom guy</span></td>
+            <td><span class='monster' data-id="1800">angry mushroom guy</span><span class='monster' data-id="740">Neptune flytrap</span></td>
         </tr>
         <tr>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Slimes" title="Category:Slimes">Slimes</a>
