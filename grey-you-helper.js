@@ -274,22 +274,22 @@ function doFight() {
     }
 
     if (enemy.adv) {
-        info.innerHTML = `${goo} ${hourglass} ${enemy.adv} adventures`;
+        info.innerHTML += `${goo} ${hourglass} ${enemy.adv} adventures`;
         if (!settings.hideGoose && !goosed.includes(name)) {
             info.innerHTML += `<br/> ${goose} <b>You have NOT goosed this enemy</b>`;
         }
     } else if (enemy.skill) {
-        info.innerHTML = `${getSkillImage(enemy.img)} <b>${enemy.skill}</b><br/>${enemy.desc}`;
+        info.innerHTML += `${getSkillImage(enemy.img)} <b>${enemy.skill}</b><br/>${enemy.desc}`;
     } else if (enemy.muscle) {
-        info.innerHTML = `${goo} <b>${enemy.muscle} Muscle</b>`;
+        info.innerHTML += `${goo} <b>${enemy.muscle} Muscle</b>`;
     } else if (enemy.mysticality) {
-        info.innerHTML = `${goo} <b>${enemy.mysticality} Mysticality</b>`;
+        info.innerHTML += `${goo} <b>${enemy.mysticality} Mysticality</b>`;
     } else if (enemy.moxie) {
-        info.innerHTML = `${goo} <b>${enemy.moxie} Moxie</b>`;
+        info.innerHTML += `${goo} <b>${enemy.moxie} Moxie</b>`;
     } else if (enemy.hp) {
-        info.innerHTML = `${goo} <b>${enemy.hp} HP</b>`;
+        info.innerHTML += `${goo} <b>${enemy.hp} HP</b>`;
     } else if (enemy.mp) {
-        info.innerHTML = `${goo} <b>${enemy.mp} MP</b>`;
+        info.innerHTML += `${goo} <b>${enemy.mp} MP</b>`;
     }
 
     if (!settings.hideGoose && goosed.includes(name)) {
@@ -450,9 +450,9 @@ function doCharsheet() {
     document.body.append(stylesheetContainer);
 
     const stylesheet = stylesheetContainer.sheet;
-    const gooseStyle = stylesheet.insertRule(`.goose { ${settings.hideGoose ? 'display: none' : ''}}`, 0);
+    const gooseStyle = stylesheet.insertRule(`.goose, .gooButton.goose { ${settings.hideGoose ? 'display: none;' : ''}}`, 0);
     const imagesStyle = stylesheet.insertRule(`.goo--img { display: ${settings.hideImages ? 'none' : 'inline-block'}; width: 30px; height: 30px; vertical-align: middle; }`, 1);
-    const skillsStyle = stylesheet.insertRule(`.goo--img.goo--skill { ${settings.hideGoose ? 'display: none' : ''}}`, 2);
+    const skillsStyle = stylesheet.insertRule(`.goo--img.goo--skill { ${settings.hideSkillImages ? 'display: none;' : ''}}`, 2);
 
 
     container.innerHTML = `
@@ -564,7 +564,7 @@ function doCharsheet() {
         stylesheet.cssRules[gooseStyle].style.display = settings.hideGoose ? 'none' : '';
     }
     if (settings.hideImages) {
-        stylesheet.cssRules[imagesStyle].style.display = settings.hideImages ? 'none' : '';
+        stylesheet.cssRules[imagesStyle].style.display = settings.hideImages ? 'none' : 'inline-block';
     }
     if (settings.hideSkillImages) {
         stylesheet.cssRules[skillsStyle].style.display = settings.hideSkillImages ? 'none' : '';
