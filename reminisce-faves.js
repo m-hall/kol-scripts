@@ -8,6 +8,18 @@
 // @icon         https://www.google.com/s2/favicons?domain=kingdomofloathing.com
 // ==/UserScript==
 
+const MAX_SEARCH_RESULTS = 37;
+const AUTO_SUBMIT = false;
+
+/**
+ * Put search results containing your query near the beginning of the text at the front of the list
+ */
+const SORT_BY_RELEVANCE = false;
+
+/**
+ * Put search results that begin with the query at the front of the list
+ */
+const SORT_STARTS_WITH = true;
 
 const monsters = [
     { name: 'ninja snowman assassin', id: '1185', title: 'trapper shortcut' },
@@ -26,32 +38,24 @@ const monsters = [
     if (!heading.innerText.includes('Reminiscing')) {
         return;
     }
-    
-    document.body.append(getStyles());
-    document.body.append(getEnchantmentsTable());
 
-    const form = document.querySelector('form');
-
-    const container = document.createElement('div');
+    const favesContainer = getFaves();
+    const faves = favesContainer.querySelector('#faves');
 
     monsters.forEach(monster => {
-        const span = document.createElement('span');
-        span.classList.add('monster');
-        span.innerText = monster.name;
-        span.dataset.id = monster.id;
-        if (monster.title) {
-            span.title = monster.title;
-        }
-        container.append(span);
+        faves.append(createMonster(monster.name, monster.id, monster.title));
     });
 
-    container.addEventListener('click', onClickMonsterContainer);
-
-    form.after(container);
+    document.body.append(
+        getStyles(),
+        favesContainer,
+        getSearch(),
+        getEnchantmentsTable()
+    );
 })();
 
 function onClickMonsterContainer(e) {
-    const monsterButton = Array.from(e.target.classList).includes('monster') ?? e.target.nearest('.monster');
+    const monsterButton = Array.from(e.target.classList).includes('monster') ? e.target : e.target.nearest('.monster');
     if (!monsterButton) {
         return;
     }
@@ -60,7 +64,80 @@ function onClickMonsterContainer(e) {
 
     const form = document.querySelector('form');
     form.mid.value = id;
-    // form.submit();
+    AUTO_SUBMIT && form.submit();
+}
+
+function getMatches(name) {
+    const options = document.querySelector('form').mid.options;
+
+    const lower = name.toLocaleLowerCase();
+
+    const names = {};
+
+    const matchedOptions = Array.from(options).filter(opt => opt.innerText.toLocaleLowerCase().includes(lower));
+    const matches = matchedOptions.map(opt => {
+        const item = {name: opt.innerText, id: opt.value, sortName: opt.innerText.toLocaleLowerCase()};
+
+        if (names[opt.innerText]) {
+            if (!names[opt.innerText].isDupe) {
+                names[opt.innerText].isDupe = true;
+                names[opt.innerText].name = `${names[opt.innerText].name} (${names[opt.innerText].id})`;
+            }
+
+            item.name = `${item.name} (${item.id})`;
+            item.isDupe = true;
+        } else {
+            names[opt.innerText] = item;
+        }
+
+        return item;
+    });
+
+
+    if (SORT_BY_RELEVANCE) {
+        matches.sort((a, b) => {
+            return a.sortName.indexOf(lower) - b.sortName.indexOf(lower);
+        });
+    } else if (SORT_STARTS_WITH) {
+        matches.sort((a, b) => {
+            if (a.sortName.startsWith(lower)) {
+                if (b.sortName.startsWith(lower)) {
+                    return a.sortName.localeCompare(b.sortName);
+                }
+                return -1;
+            } else if (b.sortName.startsWith(lower)) {
+                return 1;
+            }
+            return a.sortName.localeCompare(b.sortName);
+        })
+    }
+
+    return matches;
+}
+
+function onUpdateSearch(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const searchResults = document.querySelector('#results');
+    searchResults.innerHTML = '';
+
+    if (!this.value) {
+        return false;
+    }
+    getMatches(this.value).slice(0, MAX_SEARCH_RESULTS).forEach(monster => {
+        searchResults.append(createMonster(monster.name, monster.id));
+    });
+    return false;
+}
+function createMonster(name, id, title) {
+    const span = document.createElement('span');
+    span.classList.add('monster');
+    span.innerText = name;
+    span.dataset.id = id;
+    if (title) {
+        span.title = title;
+    }
+    return span;
 }
 
 
@@ -88,7 +165,6 @@ function getStyles() {
     }
 
     .monster {
-        width: 200px;
         margin: 5px;
         padding: 5px;
         border: 1px solid #888;
@@ -101,14 +177,60 @@ function getStyles() {
     tr.odd {
         background: #eee;
     }
+
+    #search {
+        padding: 5px;
+        margin: 5px;
+        width: 80%;
+        min-width: 200px;
+        max-width: 500px;
+    }
+    #faves,#results {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
     `;
 
     return styles;
 }
 
+function getFaves() {
+    const container = document.createElement('center');
+    container.innerHTML = `
+    <table width="95%" cellspacing="0" cellpadding="0" style="margin-bottom: 4px;">
+    <tr><td style="color: white;" align="center" bgcolor="blue"><b>Favorites</b></td></tr>
+    <tr><td align="center" style="padding: 5px; border: 1px solid blue;">
+        <div id='faves'></div>
+    </td></tr></table>`;
+
+    container.querySelector('#faves').addEventListener('click', onClickMonsterContainer);
+
+    return container;
+}
+
+function getSearch() {
+    const container = document.createElement('center');
+    container.innerHTML = `
+    <table width="95%" cellspacing="0" cellpadding="0" style="margin-bottom: 4px;">
+    <tr><td style="color: white;" align="center" bgcolor="blue"><b>Search</b></td></tr>
+    <tr><td align="center" style="padding: 5px; border: 1px solid blue;">
+        <div><input type='text' id='search' /></div>
+        <div id='results'></div>
+    </td></tr></table>`;
+
+    container.querySelector('#search').addEventListener('keyup', onUpdateSearch);
+    container.querySelector('#results').addEventListener('click', onClickMonsterContainer);
+
+    return container;
+}
+
 function getEnchantmentsTable() {
-    const container = document.createElement('div');
-    container.innerHTML = `<center>
+    const container = document.createElement('center');
+    container.innerHTML = `
+    <table width="95%" cellspacing="0" cellpadding="0">
+    <tr><td style="color: white;" align="center" bgcolor="blue"><b>Enchantments</b></td></tr>
+    <tr><td align="center" style="padding: 5px; border: 1px solid blue;">
 
 <table class="wikitable sortable jquery-tablesorter" cellspacing="0" cellpadding="3">
     <thead>
@@ -316,7 +438,8 @@ function getEnchantmentsTable() {
         </tr>
     </tbody>
     <tfoot></tfoot>
-</table></center>`;
+</table>
+</td></tr></table>`;
 
     container.addEventListener('click', onClickMonsterContainer);
 
