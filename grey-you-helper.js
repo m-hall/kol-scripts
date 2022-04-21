@@ -349,7 +349,51 @@ function doCharsheet() {
         return absorbTable && skillTable;
     });
 
+    const container = document.createElement('center');
+
     if (!absorbTable || !skillTable) {
+        container.innerHTML = `
+            <style>
+                .gooButton {
+                    margin: 5px;
+                    padding: 5px;
+                    border: 1px solid #888;
+                    display: inline-block;
+                }
+                .gooButton:hover {
+                    background: #ccc;
+                    cursor: pointer;
+                }
+            </style>
+            <table width="95%" cellspacing="0" cellpadding="0">
+            <tr><td style="color: white;" align="center" bgcolor="blue"><b>Grey You Helper</b></td></tr>
+            <tr><td align="center" style="padding: 5px; border: 1px solid blue;">
+            <b>${goo} Settings</b><br/>
+            <div>
+                <label class='gooButton'>
+                    <input type="checkbox" value="hideGoose" ${settings.hideGoose ? 'checked' : ''}/>
+                    Hide Goose
+                </label>
+                <label class='gooButton'>
+                    <input type="checkbox" value="hideBattle" ${settings.hideBattle ? 'checked' : ''}/>
+                    Hide Battle Messages
+                </label>
+                <label class='gooButton'>
+                    <input type="checkbox" value="hideImages" ${settings.hideImages ? 'checked' : ''}/>
+                    Hide images
+                </label>
+                <label class='gooButton'>
+                    <input type="checkbox" value="hideSkillImages" ${settings.hideSkillImages ? 'checked' : ''}/>
+                    Hide skill images
+                </label>
+            </div>
+            </td></tr></table>
+        `;
+
+        container.querySelectorAll('input[type="checkbox"]').forEach(button => button.addEventListener('change', function () {
+            updateSettings({[this.value]: this.checked});
+        }));
+        document.body.appendChild(container);
         return;
     }
 
@@ -410,7 +454,6 @@ function doCharsheet() {
     const imagesStyle = stylesheet.insertRule(`.goo--img { display: ${settings.hideImages ? 'none' : 'inline-block'}; width: 30px; height: 30px; vertical-align: middle; }`, 1);
     const skillsStyle = stylesheet.insertRule(`.goo--img.goo--skill { ${settings.hideGoose ? 'display: none' : ''}}`, 2);
 
-    const container = document.createElement('center');
 
     container.innerHTML = `
         <style>
@@ -425,6 +468,9 @@ function doCharsheet() {
                 cursor: pointer;
             }
         </style>
+        <table width="95%" cellspacing="0" cellpadding="0">
+        <tr><td style="color: white;" align="center" bgcolor="blue"><b>Grey You Helper</b></td></tr>
+        <tr><td align="center" style="padding: 5px; border: 1px solid blue;">
         <div>
             <b>${hourglass} Remaining adventures: ${remainingAdventures}<span class='goose'>, gooses: ${gooseAdventures}, total: ${remainingAdventures + gooseAdventures}</span></b> <span class='gooButton advButton goose' data-reset="goose">Reset gooses</span>
         </div><br/>
@@ -446,6 +492,7 @@ function doCharsheet() {
         <table cellspacing="0" cellpadding="3"><tr>
         ${skillsList.join('')}
         </tr></table>
+        <br/><b>${goo} Settings</b><br/>
         <div>
             <label class='gooButton'>
                 <input type="checkbox" value="hideGoose" ${settings.hideGoose ? 'checked' : ''}/>
@@ -464,6 +511,7 @@ function doCharsheet() {
                 Hide skill images
             </label>
         </div>
+        </td></tr></table>
     `;
 
     container.querySelectorAll('.advButton').forEach(button => button.addEventListener('click', function () {
