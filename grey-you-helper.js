@@ -203,29 +203,39 @@ const nameVariants = [
 ];
 
 const imgPrefix = 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/';
-const hourglass = getImage('hourglass.gif', 'Adventures');
-const goo = getImage('greygooball.gif', 'Grey Goo');
-const goose = getImage('greygoose.gif', 'Grey Goose');
+
 const currentUser = GM_getValue('goo--currentUser');
 
-const goosed = GM_getValue('goo--' + currentUser) || [];
+const goosed = GM_getValue(`goo--${currentUser}`) || [];
+let settings = GM_getValue(`goo--${currentUser}--settings`) || {};
 
-function getImage(src, alt, size=30) {
-    return `<img src="${imgPrefix}${src}" height="${size}" width="${size}" style="vertical-align: middle;" alt="${alt}">`
+function updateSettings(newSettings = {}) {
+    settings = {...settings, ...newSettings};
+    GM_setValue(`goo--${currentUser}--settings`, settings);
 }
 
-function getSkillImage(src) {
-    if (NO_SKILL_IMAGES) {
+function getImage(src, alt, css, force) {
+    if (settings.hideImages && !force) {
+        return '';
+    }
+    return `<span class="goo--img ${css}" style="background-image: url('${imgPrefix}${src}'); " alt="${alt}"></span>`;
+}
+
+function getSkillImage(src, force) {
+    if (settings.hideSkillImages && !force) {
         return '';
     }
     if (!src) {
         return goo;
     }
-    return getImage(src);
+    return getImage(src, '', 'goo--skill', force);
 }
 
 function doFight() {
     const monster = document.getElementById('monname');
+    const hourglass = getImage('hourglass.gif', 'Adventures');
+    const goo = getImage('greygooball.gif', 'Grey Goo');
+    const goose = getImage('greygoose.gif', 'Grey Goose');
     let name = monster.innerText;
 
     let enemy = enemies.get(name);
@@ -252,15 +262,20 @@ function doFight() {
     }
 
     const info = document.createElement('p');
+    info.innerHTML = '<style>.goo--img {display: inline-block; width: 30px; height: 30px; vertical-align: middle;}</style>';
 
     if (document.body.innerText.includes('reforms into an identical copy')) {
         goosed.push(name);
-        GM_setValue('goo--' + currentUser, goosed);
+        GM_setValue(`goo--${currentUser}`, goosed);
+    }
+
+    if (settings.hideBattle) {
+        return;
     }
 
     if (enemy.adv) {
         info.innerHTML = `${goo} ${hourglass} ${enemy.adv} adventures`;
-        if (!goosed.includes(name)) {
+        if (!settings.hideGoose && !goosed.includes(name)) {
             info.innerHTML += `<br/> ${goose} <b>You have NOT goosed this enemy</b>`;
         }
     } else if (enemy.skill) {
@@ -277,7 +292,7 @@ function doFight() {
         info.innerHTML = `${goo} <b>${enemy.mp} MP</b>`;
     }
 
-    if (goosed.includes(name)) {
+    if (!settings.hideGoose && goosed.includes(name)) {
         info.innerHTML += `<br/> ${goose} You have goosed this enemy`;
     }
 
@@ -318,6 +333,9 @@ function getStats() {
 
 function doCharsheet() {
     const bs = Array.from(document.querySelectorAll('b'));
+    const hourglass = getImage('hourglass.gif', 'Adventures', '', true);
+    const goo = getImage('greygooball.gif', 'Grey Goo', '', true);
+    const goose = getImage('greygoose.gif', 'Grey Goose', '', true);
     let absorbTable;
     let skillTable;
 
@@ -353,7 +371,7 @@ function doCharsheet() {
         }
         return `<tr style="display:none; ${(isOdd = !isOdd) ? 'background: #eee;' : ''}" class='advrow ${doneAbsorb ? 'absorbed' : 'not-absorbed'} ${doneGoosed ? 'goosed' : 'not-goosed'}'>
             <td>${doneAbsorb ? '<b>✓</b>' : ''}</td>
-            <td>${doneGoosed ? '<b>✓</b>' : ''}</td>
+            <td class='goose'>${doneGoosed ? '<b>✓</b>' : ''}</td>
             <td>${item[1].adv}</td>
             <td>${item[0]}</td>
             <td>${item[1].zone}</td>
@@ -375,7 +393,7 @@ function doCharsheet() {
     const skillsList = missingSkills.map(item => `<tr${(isOdd = !isOdd) ? ' style="background: #eee;"' : ''}>
         <th>
             <a onclick="javascript:poop('desc_skill.php?whichskill=${item[1].id}&self=true','skill', 350, 300)">
-                ${getSkillImage(item[1].img)} ${item[0]}
+                ${getSkillImage(item[1].img, true)} ${item[0]}
             </a>
         </th>
         <td>${item[1].enemy}</td>
@@ -384,36 +402,42 @@ function doCharsheet() {
         </tr>
     `);
 
+    const stylesheetContainer = document.createElement('style');
+    document.body.append(stylesheetContainer);
+
+    const stylesheet = stylesheetContainer.sheet;
+    const gooseStyle = stylesheet.insertRule(`.goose { ${settings.hideGoose ? 'display: none' : ''}}`, 0);
+    const imagesStyle = stylesheet.insertRule(`.goo--img { display: ${settings.hideImages ? 'none' : 'inline-block'}; width: 30px; height: 30px; vertical-align: middle; }`, 1);
+    const skillsStyle = stylesheet.insertRule(`.goo--img.goo--skill { ${settings.hideGoose ? 'display: none' : ''}}`, 2);
 
     const container = document.createElement('center');
 
     container.innerHTML = `
-        <div>
-            <b>${hourglass} Remaining adventures: ${remainingAdventures}, gooses: ${gooseAdventures}, total: ${remainingAdventures + gooseAdventures}</b>
-            <span class='advButton' data-reset="goose">Reset gooses</span>
-        </div><br/>
         <style>
-            .advButton {
+            .gooButton {
                 margin: 5px;
                 padding: 5px;
                 border: 1px solid #888;
                 display: inline-block;
             }
-            .advButton:hover {
+            .gooButton:hover {
                 background: #ccc;
                 cursor: pointer;
             }
         </style>
         <div>
-            <span class='advButton' data-show=".advrow">Show all</span>
-            <span class='advButton' data-show=".not-absorbed">Remaining Absorbs</span>
-            <span class='advButton' data-show=".not-goosed">Remaining Gooses</span>
-            <span class='advButton' data-show=".not-absorbed.not-goosed">Remaining both</span>
-            <span class='advButton' data-show=".not-absorbed, .not-goosed">Remaining either</span>
+            <b>${hourglass} Remaining adventures: ${remainingAdventures}<span class='goose'>, gooses: ${gooseAdventures}, total: ${remainingAdventures + gooseAdventures}</span></b> <span class='gooButton advButton goose' data-reset="goose">Reset gooses</span>
+        </div><br/>
+        <div>
+            <span class='gooButton advButton' data-show=".advrow">Show all</span>
+            <span class='gooButton advButton' data-show=".not-absorbed">Remaining Absorbs</span>
+            <span class='gooButton advButton goose' data-show=".not-goosed">Remaining Gooses</span>
+            <span class='gooButton advButton goose' data-show=".not-absorbed.not-goosed">Remaining both</span>
+            <span class='gooButton advButton goose' data-show=".not-absorbed, .not-goosed">Remaining either</span>
         </div><br/>
         <table cellspacing="0" cellpadding="3">
         <tr>
-        <th>${goo}</th><th>${goose}</th><th>${hourglass}</th><th>Monster</th><th>Zone</th></tr>
+        <th>${goo}</th><th class='goose'>${goose}</th><th>${hourglass}</th><th>Monster</th><th>Zone</th></tr>
         <tr>
         ${adventureList.join('')}
         </tr></table>
@@ -422,22 +446,56 @@ function doCharsheet() {
         <table cellspacing="0" cellpadding="3"><tr>
         ${skillsList.join('')}
         </tr></table>
+        <div>
+            <label class='gooButton'>
+                <input type="checkbox" value="hideGoose" ${settings.hideGoose ? 'checked' : ''}/>
+                Hide Goose
+            </label>
+            <label class='gooButton'>
+                <input type="checkbox" value="hideBattle" ${settings.hideBattle ? 'checked' : ''}/>
+                Hide Battle Messages
+            </label>
+            <label class='gooButton'>
+                <input type="checkbox" value="hideImages" ${settings.hideImages ? 'checked' : ''}/>
+                Hide images
+            </label>
+            <label class='gooButton'>
+                <input type="checkbox" value="hideSkillImages" ${settings.hideSkillImages ? 'checked' : ''}/>
+                Hide skill images
+            </label>
+        </div>
     `;
 
     container.querySelectorAll('.advButton').forEach(button => button.addEventListener('click', function () {
         if (this.dataset.reset === 'goose') {
-            GM_setValue('goo--' + currentUser, []);
+            GM_setValue(`goo--${currentUser}`, []);
             window.location.reload();
         }
         document.querySelectorAll('.advrow').forEach(row => row.style.display = 'none');
         document.querySelectorAll(this.dataset.show).forEach(row => row.style.display = '');
-        GM_setValue(`goo--${currentUser}-show`, this.dataset.show);
+        updateSettings({ advListShow: this.dataset.show });
     }));
-    const show = GM_getValue(`goo--${currentUser}-show`);
+    container.querySelectorAll('input[type="checkbox"]').forEach(button => button.addEventListener('change', function () {
+        updateSettings({[this.value]: this.checked});
+        
+        switch (this.value) {
+            case 'hideGoose':
+                stylesheet.cssRules[gooseStyle].style.display = settings.hideGoose ? 'none' : '';
+                break;
+            case 'hideImages':
+                stylesheet.cssRules[imagesStyle].style.display = settings.hideImages ? 'none' : 'inline-block';
+                break;
+            case 'hideSkillImages':
+                stylesheet.cssRules[skillsStyle].style.display = settings.hideSkillImages ? 'none' : '';
+                break;
+        }
+    }));
+    const show = settings.advListShow;
     container.querySelectorAll(show || '.advrow').forEach(row => row.style.display = '');
 
 
     const knownSkills = Array.from(skillTable.querySelectorAll('a'));
+
 
     knownSkills.forEach(knownSkill => {
         const skill = skillMap.get(knownSkill.innerText);
@@ -447,12 +505,22 @@ function doCharsheet() {
             desc.innerHTML = `&nbsp;&nbsp;${skill.getDesc?.(...stats) ?? skill.desc}`;
             knownSkill.after(desc);
             if (skill.img) {
-                knownSkill.innerHTML = `${getSkillImage(skill.img)} ${knownSkill.innerHTML}`;
+                knownSkill.innerHTML = `${getSkillImage(skill.img, true)} ${knownSkill.innerHTML}`;
             }
         }
     });
 
     document.body.appendChild(container);
+
+    if (settings.hideGoose) {
+        stylesheet.cssRules[gooseStyle].style.display = settings.hideGoose ? 'none' : '';
+    }
+    if (settings.hideImages) {
+        stylesheet.cssRules[imagesStyle].style.display = settings.hideImages ? 'none' : '';
+    }
+    if (settings.hideSkillImages) {
+        stylesheet.cssRules[skillsStyle].style.display = settings.hideSkillImages ? 'none' : '';
+    }
 }
 
 function doCharpane() {
