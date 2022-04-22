@@ -26,7 +26,7 @@ Adds some helpful quick access skills to the bottom of the charpane
 These skills are specific to me.
 
 ### recent zones
-Shows 5 extra zones and their areas bellow the "Last adventure"
+Shows 5 extra zones and their areas below the "Last adventure"
 
 ### reminisce faves
 Shows some quick access favorites to the reminisce page for the combat locket
