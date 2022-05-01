@@ -4,15 +4,16 @@
 // @version      0.1
 // @description  Quick access skills in char pane
 // @author       m-hall
-// @include        *kingdomofloathing.com/charpane.php
-// @include      http://127.0.0.1:60080/charpane.php
+// @match        *://*.kingdomofloathing.com/charpane.php
+// @match        *://127.0.0.1:60080/charpane.php
+// @match        *://*.kingdomofloathing.com/inventory.php*
+// @match        *://127.0.0.1:60080/inventory.php*
+// @grant        GM_getValue
+// @grant        GM_setValue
 // @icon         https://www.google.com/s2/favicons?domain=kingdomofloathing.com
-// @grant        none
 // ==/UserScript==
-//https://www.kingdomofloathing.com/runskillz.php?action=Skillz&whichskill=1010&targetplayer=319588&pwd=d6a804516712ce0f02cfe89ea05e03cc&quantity=1
-(function () {
-    'use strict';
 
+function doCharpane() {
     const skillz = [
         {name: 'healing'},
         // {
@@ -277,6 +278,52 @@
             description: '++combat [white lion]',
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon32.gif',
         },
+        // { name: 'outfits' },
+        // {
+        //     id: 'basement musc',
+        //     title: 'basement musc',
+        //     description: 'Muscle outfit for basement diving',
+        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon45.gif',
+        //     action: () => {
+        //         window.top.frames.mainpane.location = `/inv_equip.php?action=outfit&which=2&whichoutfit=-305`;
+        //     }
+        // },
+        // {
+        //     id: 'basement myst',
+        //     title: 'basement myst',
+        //     description: 'Mysticality outfit for basement diving',
+        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon31.gif',
+        //     action: () => {
+        //         window.top.frames.mainpane.location = `/inv_equip.php?action=outfit&which=2&whichoutfit=-31`;
+        //     }
+        // },
+        // {
+        //     id: 'basement moxie',
+        //     title: 'basement moxie',
+        //     description: 'Moxie outfit for basement diving',
+        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon32.gif',
+        //     action: () => {
+        //         window.top.frames.mainpane.location = `/inv_equip.php?action=outfit&which=2&whichoutfit=-309`;
+        //     }
+        // },
+        // {
+        //     id: 'elements',
+        //     title: 'elements',
+        //     description: 'Outfit with the most generic elemental resistance',
+        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon32.gif',
+        //     action: () => {
+        //         window.top.frames.mainpane.location = `/inv_equip.php?action=outfit&which=2&whichoutfit=-186`;
+        //     }
+        // },
+        // {
+        //     id: 'temp',
+        //     title: 'temp',
+        //     description: 'Quick access temporart outfit',
+        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon32.gif',
+        //     action: () => {
+        //         window.top.frames.mainpane.location = `/inv_equip.php?action=outfit&which=2&whichoutfit=-307`;
+        //     }
+        // },
     ];
 
     if (window.location.pathname.includes('charpane')) {
@@ -307,7 +354,6 @@
         `;
         let prefix = '';
         let groupIsEven = false;
-        const skillnameHTML = '<div id="skillName"></div>';
         const actionMap = {};
         const buttons = `
             ${skillz.map(skill => {
@@ -333,7 +379,14 @@
         container.innerHTML = `
             <style>${style}</style>
             ${buttons}
-            ${skillnameHTML}
+            <form target="mainpane" action="inv_equip.php" method="get">
+                <input type="hidden" name="action" value="outfit" />
+                <input type="hidden" name="which" value="2" />
+                <select name="whichoutfit" style="width: 100px">
+                    ${GM_getValue('qs-outfits')}
+                </select>
+            </form>
+            <div id="skillName"></div>
         `;
         const skillname = container.querySelector('#skillname');
         container.querySelectorAll('button').forEach(function (btn) {
@@ -373,7 +426,33 @@
                 skillname.innerHTML = '';
                 skillname.style.display = 'none';
             })
-        })
+        });
+        const outfitChanger = container.querySelector('[name="whichoutfit"]');
+        const outfitGroups = outfitChanger.querySelectorAll('optgroup');
+        const customOutfits = Array.from(outfitGroups).find(group => group.label === 'Custom Outfits');
+        if (customOutfits && customOutfits !== outfitGroups[0]) {
+            outfitGroups[0].before(customOutfits);
+        }
+        outfitChanger.addEventListener('change', function () {
+            container.querySelector('form').submit();
+        });
         body.appendChild(container);
     }
-})();
+};
+
+function doInventory() {
+    const outfitsList = document.querySelector('select[name="whichoutfit"]');
+
+    if (outfitsList) {
+        GM_setValue('qs-outfits', outfitsList.innerHTML);
+    }
+}
+
+switch(window.location.pathname){
+    case '/inventory.php':
+        doInventory();
+        break;
+    case '/charpane.php':
+        doCharpane();
+        break;
+}
