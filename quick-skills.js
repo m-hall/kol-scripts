@@ -384,7 +384,7 @@ function doCharpane() {
                 <select name="whichoutfit" style="width: 100px">
                     ${GM_getValue('qs-outfits')}
                 </select>
-            <div>
+            </div>
             <div id="skillName"></div>
         `;
         const skillname = container.querySelector('#skillname');
