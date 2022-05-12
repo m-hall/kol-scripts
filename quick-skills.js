@@ -374,18 +374,17 @@ function doCharpane() {
             }).join(' ')}
             </div>
         `;
+        groupIsEven = !groupIsEven;
         const container = document.createElement('center');
         container.className = 'quickSkillz';
         container.innerHTML = `
             <style>${style}</style>
             ${buttons}
-            <form target="mainpane" action="inv_equip.php" method="get">
-                <input type="hidden" name="action" value="outfit" />
-                <input type="hidden" name="which" value="2" />
+            <div class="skillGroup"${groupIsEven ? ' style="background:#ccc"' : ''}><span class="groupName">outfits</span>
                 <select name="whichoutfit" style="width: 100px">
                     ${GM_getValue('qs-outfits')}
                 </select>
-            </form>
+            <div>
             <div id="skillName"></div>
         `;
         const skillname = container.querySelector('#skillname');
@@ -434,7 +433,7 @@ function doCharpane() {
             outfitGroups[0].before(customOutfits);
         }
         outfitChanger.addEventListener('change', function () {
-            container.querySelector('form').submit();
+            dojax(`/inv_equip.php?action=outfit&which=2&whichoutfit=${this.value}&ajax=1`);
         });
         body.appendChild(container);
     }
