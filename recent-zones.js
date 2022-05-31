@@ -14,7 +14,7 @@
     const SHOW_COUNT = 5;
     const MAP_IMG = 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/map.gif';
 
-    const user = document.querySelector('td[valign=center] a[href*=charsheet]');
+    const user = document.querySelector('td[valign=center] a[href*=charsheet], #chit_character a[href*=charsheet]');
     const [area, zone] = Array.from(document.querySelectorAll('#nudgeblock+center a'));
     let recents = GM_getValue(RECENT_KEY + user.innerText) || [];
 

@@ -39,6 +39,8 @@ const monsters = [
         return;
     }
 
+    const root = document.querySelector('#content_') || document.body;
+
     const favesContainer = getFaves();
     const faves = favesContainer.querySelector('#faves');
 
@@ -46,7 +48,7 @@ const monsters = [
         faves.append(createMonster(monster.name, monster.id, monster.title));
     });
 
-    document.body.append(
+    root.append(
         getStyles(),
         favesContainer,
         getSearch(),
