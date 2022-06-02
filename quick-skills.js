@@ -326,7 +326,9 @@ function doCharpane() {
         // },
     ];
 
-    if (window.location.pathname.includes('charpane')) {
+    const chit = document.body.querySelector('#chit_floor');
+
+    if (!chit) {
         var body = document.body;
         var charPaneContainer = document.createElement('center');
         var charPaneContents = body.querySelectorAll('body > :not(#rollover)');
@@ -342,99 +344,104 @@ function doCharpane() {
         charPaneContents.forEach(el => charPaneContainer.appendChild(el));
 
         body.appendChild(charPaneContainer);
+    }
 
-        const style = `
-        .close { right: 0 !important; }
-        #skillName {display: none; position:absolute; bottom:100%; margin-bottom: 5px; border: 1px solid black; background: white; color: black; padding: 2px; width:90%; right: 5%;}
-        .skillDesc {font-size:0.6em;}
-        .groupName {font-size: 10px; position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%);}
-        .quickSkill {padding: 0}
-        .skillGroup {display:inline-block;padding:3px 10px 10px;white-space:nowrap;position:relative}
-        .quickSkillz {position: relative; display: flex; justify-content: center; flex-wrap: wrap; row-gap: 5px;}
-        `;
-        let prefix = '';
-        let groupIsEven = false;
-        const actionMap = {};
-        const buttons = `
-            ${skillz.map(skill => {
-                if (!skill.id) {
-                    groupIsEven = !groupIsEven;
-                    let result = `${prefix}<div class="skillGroup"${groupIsEven ? ' style="background:#ccc"' : ''}><span class="groupName">${skill.name || ''}</span>`;
-                    if (!prefix) {
-                        prefix = '</div>';
-                    }
-                    return result;
+    const style = `
+    .close { right: 0 !important; }
+    #skillName {display: none; bottom:100%; margin-bottom: 5px; border: 1px solid black; background: white; color: black; padding: 2px; width:90%; right: 5%;}
+    .skillDesc {font-size:0.6em;}
+    .groupName {font-size: 10px; position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%);}
+    .quickSkill {padding: 0}
+    .skillGroup {display:inline-block;padding:3px 10px 10px;white-space:nowrap;position:relative}
+    .quickSkillz {position: relative; display: flex; justify-content: center; flex-wrap: wrap; row-gap: 5px;}
+    `;
+    let prefix = '';
+    let groupIsEven = false;
+    const actionMap = {};
+    const buttons = `
+        ${skillz.map(skill => {
+            if (!skill.id) {
+                groupIsEven = !groupIsEven;
+                let result = `${prefix}<div class="skillGroup"${groupIsEven ? ' style="background:#ccc"' : ''}><span class="groupName">${skill.name || ''}</span>`;
+                if (!prefix) {
+                    prefix = '</div>';
                 }
-                if (!Number.isInteger(skill.id)) {
-                    actionMap[skill.id] = skill.action;
-                }
-                return `<button data-which='${skill.id}' data-title="${skill.title}" data-cost="${skill.cost || ''}" data-description="${skill.description}" style="padding: 0">
-                    <img src="${skill.image}" height="16" width="16">
-                </button>`;
-            }).join(' ')}
-            </div>
-        `;
-        groupIsEven = !groupIsEven;
-        const container = document.createElement('center');
-        container.className = 'quickSkillz';
-        container.innerHTML = `
-            <style>${style}</style>
-            ${buttons}
-            <div class="skillGroup"${groupIsEven ? ' style="background:#ccc"' : ''}><span class="groupName">outfits</span>
-                <select name="whichoutfit" style="width: 100px">
-                    ${GM_getValue('qs-outfits')}
-                </select>
-            </div>
-            <div id="skillName"></div>
-        `;
-        const skillname = container.querySelector('#skillname');
-        container.querySelectorAll('button').forEach(function (btn) {
-            btn.addEventListener('click', function (e) {
-                e.preventDefault();
-                const whichskill = this.dataset.which;
-                if (!Number.isInteger(+whichskill)) {
-                    actionMap[whichskill]();
-                }
-                if (e.shiftKey) {
-                    pop_query($(this), 'How many times?', 'Do It!', function (res) {
-                        dojax(`/runskillz.php?action=Skillz&whichskill=${whichskill}&targetplayer=0&pwd=${pwdhash}&quantity=${res}&ajax=1`);
-                    });
-                } else {
-                    dojax(`/runskillz.php?action=Skillz&whichskill=${whichskill}&targetplayer=0&pwd=${pwdhash}&quantity=1&ajax=1`);
-                }
-            })
-            btn.addEventListener('contextmenu', function (e) {
-                e.preventDefault();
-                const whichskill = this.dataset.which;
-                if (!Number.isInteger(+whichskill)) {
-                    return;
-                }
+                return result;
+            }
+            if (!Number.isInteger(skill.id)) {
+                actionMap[skill.id] = skill.action;
+            }
+            return `<button data-which='${skill.id}' data-title="${skill.title}" data-cost="${skill.cost || ''}" data-description="${skill.description}" style="padding: 0">
+                <img src="${skill.image}" height="16" width="16">
+            </button>`;
+        }).join(' ')}
+        </div>
+    `;
+    groupIsEven = !groupIsEven;
+    const container = document.createElement('center');
+    container.className = 'quickSkillz';
+    container.innerHTML = `
+        <style>${style}</style>
+        <div id="skillName"></div>
+        ${buttons}
+        <div class="skillGroup"${groupIsEven ? ' style="background:#ccc"' : ''}><span class="groupName">outfits</span>
+            <select name="whichoutfit" style="width: 100px">
+                ${GM_getValue('qs-outfits')}
+            </select>
+        </div>
+    `;
+    const skillName = container.querySelector('#skillName');
+    container.querySelectorAll('button').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const whichskill = this.dataset.which;
+            if (!Number.isInteger(+whichskill)) {
+                actionMap[whichskill]();
+            }
+            if (e.shiftKey) {
                 pop_query($(this), 'How many times?', 'Do It!', function (res) {
                     dojax(`/runskillz.php?action=Skillz&whichskill=${whichskill}&targetplayer=0&pwd=${pwdhash}&quantity=${res}&ajax=1`);
                 });
+            } else {
+                dojax(`/runskillz.php?action=Skillz&whichskill=${whichskill}&targetplayer=0&pwd=${pwdhash}&quantity=1&ajax=1`);
+            }
+        })
+        btn.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            const whichskill = this.dataset.which;
+            if (!Number.isInteger(+whichskill)) {
+                return;
+            }
+            pop_query($(this), 'How many times?', 'Do It!', function (res) {
+                dojax(`/runskillz.php?action=Skillz&whichskill=${whichskill}&targetplayer=0&pwd=${pwdhash}&quantity=${res}&ajax=1`);
             });
-            btn.addEventListener('mouseenter', function (e) {
-                if (this.dataset.cost) {
-                    skillname.innerHTML = `<div>${this.dataset.title} (${this.dataset.cost}mp)</div><div class='skillDesc'>${this.dataset.description}</div>`;
-                } else {
-                    skillname.innerHTML = `<div>${this.dataset.title}</div><div class='skillDesc'>${this.dataset.description}</div>`;
-                }
-                skillname.style.display = 'block';
-            })
-            btn.addEventListener('mouseleave', function (e) {
-                skillname.innerHTML = '';
-                skillname.style.display = 'none';
-            })
         });
-        const outfitChanger = container.querySelector('[name="whichoutfit"]');
-        const outfitGroups = outfitChanger.querySelectorAll('optgroup');
-        const customOutfits = Array.from(outfitGroups).find(group => group.label === 'Custom Outfits');
-        if (customOutfits && customOutfits !== outfitGroups[0]) {
-            outfitGroups[0].before(customOutfits);
-        }
-        outfitChanger.addEventListener('change', function () {
-            dojax(`/inv_equip.php?action=outfit&which=2&whichoutfit=${this.value}&ajax=1`);
-        });
+        btn.addEventListener('mouseenter', function (e) {
+            if (this.dataset.cost) {
+                skillName.innerHTML = `<div>${this.dataset.title} (${this.dataset.cost}mp)</div><div class='skillDesc'>${this.dataset.description}</div>`;
+            } else {
+                skillName.innerHTML = `<div>${this.dataset.title}</div><div class='skillDesc'>${this.dataset.description}</div>`;
+            }
+            skillName.style.display = 'block';
+        })
+        btn.addEventListener('mouseleave', function (e) {
+            skillName.innerHTML = '';
+            skillName.style.display = 'none';
+        })
+    });
+    const outfitChanger = container.querySelector('[name="whichoutfit"]');
+    const outfitGroups = outfitChanger.querySelectorAll('optgroup');
+    const customOutfits = Array.from(outfitGroups).find(group => group.label === 'Custom Outfits');
+    if (customOutfits && customOutfits !== outfitGroups[0]) {
+        outfitGroups[0].before(customOutfits);
+    }
+    outfitChanger.addEventListener('change', function () {
+        dojax(`/inv_equip.php?action=outfit&which=2&whichoutfit=${this.value}&ajax=1`);
+    });
+
+    if (chit) {
+        chit.prepend(container);
+    } else {
         body.appendChild(container);
     }
 };
