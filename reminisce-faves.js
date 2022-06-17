@@ -2,7 +2,9 @@
 // @name         Reminisce favorites
 // @description  Shows a list of favorite enemies to reminisce.
 // @include      *www.kingdomofloathing.com/choice.php?forceoption=0
+// @include      *www.kingdomofloathing.com/inventory.php?reminisce=1
 // @include      http://127.0.0.1:60080/choice.php?forceoption=0
+// @include      http://127.0.0.1:60080/inventory.php?reminisce=1
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @icon         https://www.google.com/s2/favicons?domain=kingdomofloathing.com
@@ -170,6 +172,7 @@ function getStyles() {
         margin: 5px;
         padding: 5px;
         border: 1px solid #888;
+        display: inline-block;
     }
     .monster:hover {
         background: #ccc;
@@ -234,7 +237,7 @@ function getEnchantmentsTable() {
     <tr><td style="color: white;" align="center" bgcolor="blue"><b>Enchantments</b></td></tr>
     <tr><td align="center" style="padding: 5px; border: 1px solid blue;">
 
-<table class="wikitable sortable jquery-tablesorter" cellspacing="0" cellpadding="3">
+<table class="wikitable sortable jquery-tablesorter" cellspacing="0" cellpadding="8">
     <thead>
         <tr>
             <th><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Phylum" title="Phylum" class="mw-redirect">Phylum</a></th>
@@ -294,7 +297,7 @@ function getEnchantmentsTable() {
                         Damage</a></span><br><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Moxie_Modifiers"
                     title="Moxie Modifiers">Moxie</a> +50%
             </td>
-            <td><span class='monster' data-id="141">1335 HaXx0r</span></td>
+            <td><span class='monster' data-id="141">1335 HaXx0r</span><span class='monster' data-id="132">Bob Racecar</span><span class='monster' data-id="131">Racecar Bob</span></td>
         </tr>
         <tr class='odd'>
             <td><a target="_blank" href="https://kol.coldfront.net/thekolwiki/index.php/Category:Elementals" title="Category:Elementals">Elementals</a>
