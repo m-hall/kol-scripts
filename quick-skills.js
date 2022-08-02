@@ -192,13 +192,42 @@ function doCharpane() {
             description: '+10 ML (20 turns)',
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/brokenflute.gif'
         },
-        {},
+        {name: 'booze'},
         {
             id: 6014,
             cost: 50,
             title: 'Ode To Booze',
             description: '+Adv per booze potency',
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/odetobooze.gif'
+        },
+        {
+            id: 7414,
+            cost: 25,
+            title: 'Sweat Out Some Booze',
+            description: 'Restore 1 Liver Capacity (3x / day) (uses sweat instead of MP)',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/sweaty.gif'
+        },
+        { name: 'grey you' },
+        {
+            id: 27045,
+            cost: 40,
+            title: 'Photonic Shroud',
+            description: '--combat [Black Panther]',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon45.gif',
+        },
+        {
+            id: 27031,
+            cost: 50,
+            title: 'Phase Shift',
+            description: '--combat [Spectral Jellyfish]',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon31.gif',
+        },
+        {
+            id: 27032,
+            cost: 50,
+            title: 'Piezoelectric Honk',
+            description: '++combat [white lion]',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon32.gif',
         },
         { name: 'standard' },
         {
@@ -226,6 +255,15 @@ function doCharpane() {
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/backcamera.gif',
             action: () => {
                 window.top.frames.mainpane.location = `/inventory.php?action=bcmode`;
+            }
+        },
+        {
+            id: 'stillsuit',
+            title: 'tiny stillsuit',
+            description: 'Distill booze from sweat',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/stillsuit.gif',
+            action: () => {
+                window.top.frames.mainpane.location = `/inventory.php?action=distill`;
             }
         },
         { name: 'non-standard' },
@@ -256,74 +294,6 @@ function doCharpane() {
                 window.top.frames.mainpane.location = `/place.php?whichplace=chateau`;
             }
         },
-        { name: 'grey you' },
-        {
-            id: 27045,
-            cost: 40,
-            title: 'Photonic Shroud',
-            description: '--combat [Black Panther]',
-            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon45.gif',
-        },
-        {
-            id: 27031,
-            cost: 50,
-            title: 'Phase Shift',
-            description: '--combat [Spectral Jellyfish]',
-            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon31.gif',
-        },
-        {
-            id: 27032,
-            cost: 50,
-            title: 'Piezoelectric Honk',
-            description: '++combat [white lion]',
-            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon32.gif',
-        },
-        // { name: 'outfits' },
-        // {
-        //     id: 'basement musc',
-        //     title: 'basement musc',
-        //     description: 'Muscle outfit for basement diving',
-        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon45.gif',
-        //     action: () => {
-        //         window.top.frames.mainpane.location = `/inv_equip.php?action=outfit&which=2&whichoutfit=-305`;
-        //     }
-        // },
-        // {
-        //     id: 'basement myst',
-        //     title: 'basement myst',
-        //     description: 'Mysticality outfit for basement diving',
-        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon31.gif',
-        //     action: () => {
-        //         window.top.frames.mainpane.location = `/inv_equip.php?action=outfit&which=2&whichoutfit=-31`;
-        //     }
-        // },
-        // {
-        //     id: 'basement moxie',
-        //     title: 'basement moxie',
-        //     description: 'Moxie outfit for basement diving',
-        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon32.gif',
-        //     action: () => {
-        //         window.top.frames.mainpane.location = `/inv_equip.php?action=outfit&which=2&whichoutfit=-309`;
-        //     }
-        // },
-        // {
-        //     id: 'elements',
-        //     title: 'elements',
-        //     description: 'Outfit with the most generic elemental resistance',
-        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon32.gif',
-        //     action: () => {
-        //         window.top.frames.mainpane.location = `/inv_equip.php?action=outfit&which=2&whichoutfit=-186`;
-        //     }
-        // },
-        // {
-        //     id: 'temp',
-        //     title: 'temp',
-        //     description: 'Quick access temporart outfit',
-        //     image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/goocon32.gif',
-        //     action: () => {
-        //         window.top.frames.mainpane.location = `/inv_equip.php?action=outfit&which=2&whichoutfit=-307`;
-        //     }
-        // },
     ];
 
     const chit = document.body.querySelector('#chit_floor');
@@ -384,12 +354,12 @@ function doCharpane() {
         <style>${style}</style>
         <div id="skillName"></div>
         ${buttons}
-        <div class="skillGroup"${groupIsEven ? ' style="background:#ccc"' : ''}><span class="groupName">outfits</span>
-            <select name="whichoutfit" style="width: 100px">
-                ${GM_getValue('qs-outfits')}
-            </select>
-        </div>
     `;
+        // <div class="skillGroup"${groupIsEven ? ' style="background:#ccc"' : ''}><span class="groupName">outfits</span>
+        //     <select name="whichoutfit" style="width: 100px">
+        //         ${GM_getValue('qs-outfits')}
+        //     </select>
+        // </div>
     const skillName = container.querySelector('#skillName');
     container.querySelectorAll('button').forEach(function (btn) {
         btn.addEventListener('click', function (e) {
@@ -429,15 +399,15 @@ function doCharpane() {
             skillName.style.display = 'none';
         })
     });
-    const outfitChanger = container.querySelector('[name="whichoutfit"]');
-    const outfitGroups = outfitChanger.querySelectorAll('optgroup');
-    const customOutfits = Array.from(outfitGroups).find(group => group.label === 'Custom Outfits');
-    if (customOutfits && customOutfits !== outfitGroups[0]) {
-        outfitGroups[0].before(customOutfits);
-    }
-    outfitChanger.addEventListener('change', function () {
-        dojax(`/inv_equip.php?action=outfit&which=2&whichoutfit=${this.value}&ajax=1`);
-    });
+    // const outfitChanger = container.querySelector('[name="whichoutfit"]');
+    // const outfitGroups = outfitChanger.querySelectorAll('optgroup');
+    // const customOutfits = Array.from(outfitGroups).find(group => group.label === 'Custom Outfits');
+    // if (customOutfits && customOutfits !== outfitGroups[0]) {
+    //     outfitGroups[0].before(customOutfits);
+    // }
+    // outfitChanger.addEventListener('change', function () {
+    //     dojax(`/inv_equip.php?action=outfit&which=2&whichoutfit=${this.value}&ajax=1`);
+    // });
 
     if (chit) {
         chit.prepend(container);
