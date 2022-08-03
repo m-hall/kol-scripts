@@ -263,7 +263,7 @@ function doCharpane() {
             description: 'Distill booze from sweat',
             image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/stillsuit.gif',
             action: () => {
-                window.top.frames.mainpane.location = `/inventory.php?action=distill`;
+                window.top.frames.mainpane.location = `/inventory.php?action=distill&pwd=${pwdhash}`;
             }
         },
         { name: 'non-standard' },
