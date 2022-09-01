@@ -266,6 +266,15 @@ function doCharpane() {
                 window.top.frames.mainpane.location = `/inventory.php?action=distill&pwd=${pwdhash}`;
             }
         },
+        {
+            id: 'parka',
+            title: 'Jurassic Parka',
+            description: 'Adjust your Parka',
+            image: 'https://d2uyhvukfffg5a.cloudfront.net/itemimages/jparka7.gif',
+            action: () => {
+                window.top.frames.mainpane.location = `/inventory.php?action=jparka`;
+            }
+        },
         { name: 'non-standard' },
         {
             id: 'barrel',
